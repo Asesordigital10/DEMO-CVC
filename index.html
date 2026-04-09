@@ -1,147 +1,67 @@
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CVC | Sistema de Gestión Vial</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CVC Vial</title>
+    
+    <!-- Configuración para modo App (PWA) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CVC Vial">
+    <link rel="apple-touch-icon" href="image.jpg">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        
-        :root {
-            --cvc-black: #000000;
-            --cvc-white: #ffffff;
-            --cvc-gray: #1a1a1a;
-        }
-
-        body {
-            background-color: var(--cvc-black);
-            color: var(--cvc-white);
-            font-family: 'Inter', sans-serif;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .tab-active {
-            border-bottom: 4px solid var(--cvc-white);
-            color: var(--cvc-white);
-        }
-
-        .input-vial {
-            background-color: #0f0f0f;
-            border: 1px solid #262626;
-            color: white;
-            border-radius: 12px;
-            padding: 12px;
-            width: 100%;
-            font-size: 0.875rem;
-        }
-
-        .input-vial:focus {
-            outline: none;
-            border-color: #525252;
-        }
-
-        .card-oc {
-            background-color: var(--cvc-gray);
-            border: 1px solid #262626;
-            border-left: 6px solid #fbbf24;
-            transition: transform 0.1s;
-        }
-
-        .card-recibida {
-            border-left-color: #22c55e;
-            opacity: 0.85;
-        }
-
-        .btn-primary {
-            background-color: var(--cvc-white);
-            color: var(--cvc-black);
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
+        :root { --cvc-black: #000000; --cvc-white: #ffffff; --cvc-gray: #1a1a1a; }
+        body { background-color: var(--cvc-black); color: var(--cvc-white); font-family: 'Inter', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        .tab-active { border-bottom: 4px solid var(--cvc-white); color: var(--cvc-white); }
+        .input-vial { background-color: #0f0f0f; border: 1px solid #262626; color: white; border-radius: 12px; padding: 12px; width: 100%; font-size: 0.875rem; }
+        .input-vial:focus { outline: none; border-color: #525252; }
+        .card-oc { background-color: var(--cvc-gray); border: 1px solid #262626; border-left: 6px solid #fbbf24; transition: transform 0.1s; }
+        .card-recibida { border-left-color: #22c55e; opacity: 0.85; }
+        .btn-primary { background-color: var(--cvc-white); color: var(--cvc-black); font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
         .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #000;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .camera-btn {
-            background-color: #262626;
-            border: 2px dashed #444;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .camera-btn.has-file {
-            border-color: #22c55e;
-            background-color: #064e3b;
-        }
-
-        /* Modal de visualización de imagen */
-        #modal-visor {
-            background: rgba(0,0,0,0.95);
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 200;
-            padding: 20px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #000; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .camera-btn { background-color: #262626; border: 2px dashed #444; padding: 20px; border-radius: 15px; text-align: center; cursor: pointer; }
+        .camera-btn.has-file { border-color: #22c55e; background-color: #064e3b; }
+        #modal-visor { background: rgba(0,0,0,0.95); display: none; position: fixed; inset: 0; z-index: 200; padding: 20px; flex-direction: column; align-items: center; justify-content: center; }
     </style>
 </head>
 <body class="pb-24">
 
-    <!-- HEADER -->
-    <header class="bg-black pt-6 pb-4 flex flex-col items-center border-b border-neutral-900">
+    <header class="bg-black pt-8 pb-4 flex flex-col items-center border-b border-neutral-900">
         <img src="image.jpg" alt="CVC Logo" class="h-14 mb-2">
         <h1 class="text-[9px] tracking-[0.4em] uppercase opacity-40 font-black text-white">Logística y Suministros Viales</h1>
     </header>
 
-    <!-- NAVEGACIÓN -->
     <nav class="bg-black sticky top-0 z-50 border-b border-neutral-900 shadow-2xl">
         <div class="flex justify-around items-center h-16">
             <button onclick="switchTab('emitir')" id="tab-emitir" class="flex-1 h-full font-bold uppercase text-[9px] flex flex-col justify-center items-center gap-1 tab-active">
-                <i class="fa-solid fa-file-circle-plus text-lg"></i>
-                <span>Emitir</span>
+                <i class="fa-solid fa-file-circle-plus text-lg"></i><span>Emitir</span>
             </button>
             <button onclick="switchTab('recibir')" id="tab-recibir" class="flex-1 h-full font-bold uppercase text-[9px] flex flex-col justify-center items-center gap-1 text-neutral-500">
-                <i class="fa-solid fa-truck-moving text-lg"></i>
-                <span>Obras</span>
+                <i class="fa-solid fa-truck-moving text-lg"></i><span>Obras</span>
             </button>
             <button onclick="switchTab('historial')" id="tab-historial" class="flex-1 h-full font-bold uppercase text-[9px] flex flex-col justify-center items-center gap-1 text-neutral-500">
-                <i class="fa-solid fa-magnifying-glass text-lg"></i>
-                <span>Historial</span>
+                <i class="fa-solid fa-magnifying-glass text-lg"></i><span>Historial</span>
             </button>
             <button onclick="switchTab('admin')" id="tab-admin" class="flex-1 h-full font-bold uppercase text-[9px] flex flex-col justify-center items-center gap-1 text-neutral-500">
-                <i class="fa-solid fa-database text-lg"></i>
-                <span>Datos</span>
+                <i class="fa-solid fa-database text-lg"></i><span>Datos</span>
             </button>
         </div>
     </nav>
 
     <div class="container mx-auto p-4 max-w-lg">
-        
-        <!-- VISTA 1: EMISIÓN -->
         <section id="view-emitir" class="space-y-6">
-            <div class="bg-neutral-900/40 p-6 rounded-3xl border border-neutral-800 shadow-inner">
+            <div class="bg-neutral-900/40 p-6 rounded-3xl border border-neutral-800">
                 <form id="form-oc" class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
@@ -149,11 +69,10 @@
                             <input type="text" id="fecha-oc" readonly class="input-vial font-mono text-neutral-400">
                         </div>
                         <div>
-                            <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Fecha Entrega</label>
+                            <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Entrega</label>
                             <input type="date" id="fecha-entrega" class="input-vial text-neutral-300">
                         </div>
                     </div>
-
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Maquinaria</label>
@@ -175,59 +94,43 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Proveedor</label>
-                            <select id="select-proveedor" required class="input-vial bg-black">
-                                <option value="">Cargando...</option>
-                            </select>
+                            <select id="select-proveedor" required class="input-vial bg-black"><option value="">Cargando...</option></select>
                         </div>
                         <div>
                             <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Emisor</label>
-                            <select id="select-emisor" required class="input-vial bg-black">
-                                <option value="">Cargando...</option>
-                            </select>
+                            <select id="select-emisor" required class="input-vial bg-black"><option value="">Cargando...</option></select>
                         </div>
                     </div>
-
                     <div>
                         <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Importe</label>
                         <div class="flex gap-2">
-                            <select id="select-moneda" class="w-1/3 input-vial bg-black">
-                                <option value="PESOS">PESOS ($)</option>
-                                <option value="DOLARES">DOLARES (U$S)</option>
-                            </select>
+                            <select id="select-moneda" class="w-1/3 input-vial bg-black"><option value="PESOS">PESOS ($)</option><option value="DOLARES">DOLARES (U$S)</option></select>
                             <input type="number" id="input-precio" placeholder="Precio" class="flex-1 input-vial">
-                            <select id="select-iva" class="w-1/3 input-vial bg-black">
-                                <option value="CON IVA">CON IVA</option>
-                                <option value="SIN IVA">SIN IVA</option>
-                            </select>
+                            <select id="select-iva" class="w-1/3 input-vial bg-black"><option value="CON IVA">CON IVA</option><option value="SIN IVA">SIN IVA</option></select>
                         </div>
                     </div>
-
                     <div>
-                        <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Detalle del Pedido</label>
-                        <textarea id="detalle-oc" required rows="3" placeholder="Materiales y descripción..." class="input-vial"></textarea>
+                        <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Detalle</label>
+                        <textarea id="detalle-oc" required rows="3" placeholder="Descripción..." class="input-vial"></textarea>
                     </div>
-
-                    <button type="submit" id="btn-submit" class="w-full btn-primary py-5 rounded-2xl flex items-center justify-center gap-3 shadow-lg active:scale-95 transition-transform mt-2">
-                        <i class="fa-solid fa-paper-plane"></i> GENERAR ORDEN DE COMPRA
+                    <button type="submit" id="btn-submit" class="w-full btn-primary py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-transform mt-2">
+                        <i class="fa-solid fa-paper-plane"></i> GENERAR ORDEN
                     </button>
                 </form>
             </div>
         </section>
 
-        <!-- VISTA 2: OBRAS (PENDIENTES) -->
         <section id="view-recibir" class="hidden space-y-4">
-            <h2 class="text-[10px] font-black uppercase tracking-widest text-neutral-500 ml-2">Órdenes pendientes en obra</h2>
+            <h2 class="text-[10px] font-black uppercase tracking-widest text-neutral-500 ml-2">Órdenes pendientes</h2>
             <div id="lista-pendientes" class="space-y-3"></div>
         </section>
 
-        <!-- VISTA 3: HISTORIAL -->
         <section id="view-historial" class="hidden space-y-4">
             <div class="sticky top-16 z-40 bg-black pt-2 pb-4">
-                <input type="text" id="input-busqueda" oninput="filtrarHistorial()" placeholder="Buscar por Nro, Obra, Proveedor..." class="input-vial bg-neutral-900 mb-3">
+                <input type="text" id="input-busqueda" oninput="filtrarHistorial()" placeholder="Buscar..." class="input-vial bg-neutral-900 mb-3">
                 <div class="flex gap-2">
                     <button onclick="setFiltroEstado('TODAS')" id="btn-filtro-todas" class="flex-1 py-2 rounded-full text-[9px] font-black uppercase bg-white text-black">Todas</button>
                     <button onclick="setFiltroEstado('PENDIENTE')" id="btn-filtro-pend" class="flex-1 py-2 rounded-full text-[9px] font-black uppercase bg-black text-neutral-500 border border-neutral-800">Pendientes</button>
@@ -237,45 +140,36 @@
             <div id="lista-historial" class="space-y-3"></div>
         </section>
 
-        <!-- VISTA 4: MAESTROS -->
         <section id="view-admin" class="hidden space-y-6">
             <div class="bg-neutral-900/40 p-6 rounded-3xl border border-neutral-800">
                 <h3 class="text-[10px] font-black uppercase mb-4 text-neutral-500">Nuevo Proveedor</h3>
                 <div class="flex gap-2">
-                    <input type="text" id="nuevo-prov" placeholder="Nombre" class="input-vial">
+                    <input type="text" id="nuevo-prov" class="input-vial">
                     <button onclick="agregarMaestro('proveedores', 'nuevo-prov')" class="bg-white text-black px-5 rounded-xl font-black text-xl">+</button>
                 </div>
             </div>
             <div class="bg-neutral-900/40 p-6 rounded-3xl border border-neutral-800">
                 <h3 class="text-[10px] font-black uppercase mb-4 text-neutral-500">Nuevo Emisor</h3>
                 <div class="flex gap-2">
-                    <input type="text" id="nuevo-emisor" placeholder="Nombre" class="input-vial">
+                    <input type="text" id="nuevo-emisor" class="input-vial">
                     <button onclick="agregarMaestro('emisores', 'nuevo-emisor')" class="bg-white text-black px-5 rounded-xl font-black text-xl">+</button>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- VISOR DE IMAGEN -->
-    <div id="modal-visor" onclick="this.style.display='none'">
-        <img id="img-ampliada" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl mb-4">
-        <button class="bg-white text-black px-6 py-2 rounded-full font-bold uppercase text-xs">Cerrar</button>
-    </div>
+    <div id="modal-visor" onclick="this.style.display='none'"><img id="img-ampliada" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl mb-4"></div>
 
-    <!-- MODAL RECEPCIÓN -->
     <div id="modal-recepcion" class="fixed inset-0 bg-black/95 hidden z-[100] flex items-center justify-center p-6">
         <div class="bg-neutral-900 w-full max-w-sm p-8 rounded-[2rem] border border-neutral-800">
             <h3 class="text-xl font-black mb-4 text-center uppercase" id="modal-title">RECIBIR OC</h3>
             <p id="modal-desc" class="text-[10px] text-neutral-500 mb-6 text-center uppercase font-bold"></p>
-            
-            <input type="text" id="input-receptor" placeholder="¿Quién certifica?" class="input-vial mb-4">
-            
+            <input type="text" id="input-receptor" placeholder="¿Quién recibe?" class="input-vial mb-4">
             <label for="input-foto" id="label-foto" class="camera-btn block mb-6">
                 <i class="fa-solid fa-camera text-2xl mb-2 block"></i>
                 <span class="text-[10px] font-bold uppercase" id="foto-status">Capturar Foto Remito</span>
                 <input type="file" id="input-foto" accept="image/*" capture="camera" class="hidden" onchange="procesarFoto()">
             </label>
-
             <div class="flex gap-3">
                 <button onclick="cerrarModal()" class="flex-1 border border-neutral-700 py-4 rounded-2xl font-black text-[10px] uppercase text-white">Cerrar</button>
                 <button onclick="confirmarRecepcion()" id="btn-certificar" class="flex-1 btn-primary py-4 rounded-2xl font-black text-[10px]">Confirmar</button>
@@ -283,7 +177,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -306,16 +199,11 @@
 
         let todasLasOrdenes = [];
         let filtroEstadoActual = 'TODAS';
-        let base64Foto = ""; // Aquí guardamos la imagen comprimida
+        let base64Foto = "";
 
         onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                await bootstrapDatos();
-                escucharMaestros();
-                escucharOrdenes();
-            } else {
-                signInAnonymously(auth);
-            }
+            if (user) { await bootstrapDatos(); escucharMaestros(); escucharOrdenes(); }
+            else { signInAnonymously(auth); }
         });
 
         async function bootstrapDatos() {
@@ -369,10 +257,7 @@
         function renderizarObras() {
             const container = document.getElementById('lista-pendientes');
             const pendientes = todasLasOrdenes.filter(o => o.estado === 'PENDIENTE');
-            if(pendientes.length === 0) {
-                container.innerHTML = '<p class="text-center py-20 opacity-20 text-[10px] font-bold">Sin órdenes pendientes</p>';
-                return;
-            }
+            if(pendientes.length === 0) { container.innerHTML = '<p class="text-center py-20 opacity-20 text-[10px] font-bold">Sin órdenes</p>'; return; }
             container.innerHTML = pendientes.map(o => `
                 <div onclick="abrirModal('${o.id}', '${o.correlativo}', '${o.proveedor}')" class="card-oc p-4 rounded-2xl mb-2">
                     <div class="flex justify-between items-center mb-1 text-white">
@@ -414,34 +299,29 @@
                         <span class="opacity-40">${o.fecha}</span>
                     </div>
                     <div class="text-[10px] font-black uppercase text-white">${o.proveedor}</div>
-                    <div class="text-[9px] text-neutral-500">Obra: ${o.obra} | Maq: ${o.maquinaria}</div>
-                    ${o.url_foto_remito ? `<button onclick="verFoto('${o.url_foto_remito}')" class="text-[8px] text-blue-400 underline font-bold mt-2 block uppercase tracking-widest"><i class="fa-solid fa-image mr-1"></i> Ver Remito</button>` : ''}
+                    <div class="text-[9px] text-neutral-500">Obra: ${o.obra}</div>
+                    ${o.url_foto_remito ? `<button onclick="verFoto('${o.url_foto_remito}')" class="text-[8px] text-blue-400 underline font-bold mt-2 block uppercase"><i class="fa-solid fa-image mr-1"></i> Ver Remito</button>` : ''}
                 </div>
             `).join('');
         };
 
-        // COMPRESOR DE IMAGEN (Clave para no usar Storage)
         window.procesarFoto = () => {
             const file = document.getElementById('input-foto').files[0];
             if(!file) return;
-            
             const reader = new FileReader();
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800; // Reducimos para que no ocupe mucho espacio
+                    const MAX_WIDTH = 800;
                     const scale = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scale;
-                    
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
-                    // Convertimos a JPG comprimido (0.6 de calidad)
                     base64Foto = canvas.toDataURL('image/jpeg', 0.6);
                     document.getElementById('label-foto').classList.add('has-file');
-                    document.getElementById('foto-status').innerText = "Remito capturado ✓";
+                    document.getElementById('foto-status').innerText = "Capturado ✓";
                 };
                 img.src = e.target.result;
             };
@@ -458,9 +338,7 @@
         document.getElementById('form-oc').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
-            btn.disabled = true;
-            btn.innerHTML = '<div class="loader"></div>';
-
+            btn.disabled = true; btn.innerHTML = '<div class="loader"></div>';
             const data = {
                 proveedor: document.getElementById('select-proveedor').value,
                 emisor: document.getElementById('select-emisor').value,
@@ -476,18 +354,15 @@
                 timestamp: Date.now(),
                 url_foto_remito: ""
             };
-
             try {
                 const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'ordenes'));
                 data.correlativo = `OC-${String(snap.size + 1).padStart(3, '0')}`;
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'ordenes'), data);
-
-                const msg = `🚛 *CVC - ORDEN DE COMPRA*%0A*Nro:* ${data.correlativo}%0A*Prov:* ${data.proveedor}%0A*Obra:* ${data.obra}%0A*Detalle:* ${data.detalle}`;
+                const msg = `🚛 *CVC - NUEVA OC*%0A*Nro:* ${data.correlativo}%0A*Obra:* ${data.obra}%0A*Detalle:* ${data.detalle}`;
                 window.open(`https://wa.me/${WHATSAPP_CONTACTO}?text=${msg}`, '_blank');
                 document.getElementById('form-oc').reset();
             } catch (err) { alert("Error"); }
-            btn.disabled = false;
-            btn.innerHTML = 'GENERAR ORDEN DE COMPRA';
+            btn.disabled = false; btn.innerHTML = 'GENERAR ORDEN';
         };
 
         let currentId, currentNum;
@@ -505,31 +380,20 @@
         window.confirmarRecepcion = async () => {
             const rec = document.getElementById('input-receptor').value.trim();
             const btn = document.getElementById('btn-certificar');
-
-            if(!rec) { alert("¿Quién recibe?"); return; }
-            if(!base64Foto) { alert("Captura la foto del remito"); return; }
-
-            btn.disabled = true;
-            btn.innerHTML = '<div class="loader mx-auto"></div>';
-
+            if(!rec || !base64Foto) { alert("Complete datos y foto"); return; }
+            btn.disabled = true; btn.innerHTML = '<div class="loader"></div>';
             try {
                 const refDoc = doc(db, 'artifacts', appId, 'public', 'data', 'ordenes', currentId);
                 const ahora = new Date().toLocaleString('es-UY');
-                
-                await updateDoc(refDoc, { 
-                    estado: 'RECIBIDA', 
-                    receptor: rec, 
-                    fecha_recepcion: ahora,
-                    url_foto_remito: base64Foto // Se guarda el texto de la imagen directamente
-                });
-
-                const msg = `✅ *CVC - RECIBIDO*%0AOC *#${currentNum}* recibida por *${rec}* el día ${ahora}.%0A%0A(La foto se puede ver en el Historial de la App)`;
+                await updateDoc(refDoc, { estado: 'RECIBIDA', receptor: rec, fecha_recepcion: ahora, url_foto_remito: base64Foto });
+                const msg = `✅ *CVC - RECIBIDO*%0AOC *#${currentNum}* recibida por *${rec}*.`;
                 cerrarModal();
                 window.open(`https://wa.me/${WHATSAPP_CONTACTO}?text=${encodeURIComponent(msg)}`, '_blank');
-            } catch (e) { alert("Error al certificar"); }
-            btn.disabled = false;
-            btn.innerHTML = 'Confirmar';
+            } catch (e) { alert("Error"); }
+            btn.disabled = false; btn.innerHTML = 'Confirmar';
         };
     </script>
 </body>
 </html>
+
+```
