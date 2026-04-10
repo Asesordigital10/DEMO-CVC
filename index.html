@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CVC Vial</title>
+    <title>CVC Vial Premium</title>
     
-    <!-- Configuración para modo App (PWA) -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="CVC Vial">
@@ -16,74 +15,186 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        :root { --cvc-black: #000000; --cvc-white: #ffffff; --cvc-gray: #1a1a1a; }
-        body { background-color: var(--cvc-black); color: var(--cvc-white); font-family: 'Inter', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        .tab-active { border-bottom: 4px solid var(--cvc-white); color: var(--cvc-white); }
-        .input-vial { background-color: #0f0f0f; border: 1px solid #262626; color: white; border-radius: 12px; padding: 12px; width: 100%; font-size: 0.875rem; }
-        .input-vial:focus { outline: none; border-color: #525252; }
-        .card-oc { background-color: var(--cvc-gray); border: 1px solid #262626; border-left: 6px solid #fbbf24; transition: transform 0.1s; }
-        .card-recibida { border-left-color: #22c55e; opacity: 0.85; }
-        .btn-primary { background-color: var(--cvc-white); color: var(--cvc-black); font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #000; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: auto; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        
+        :root {
+            --primary: #f59e0b; /* Amber */
+            --secondary: #6366f1; /* Indigo */
+            --success: #10b981; /* Emerald */
+            --bg-dark: #020617;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 50%);
+            color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-active {
+            color: var(--primary);
+            position: relative;
+        }
+        .tab-active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .input-premium {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 16px;
+            padding: 14px;
+            width: 100%;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .input-premium:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #000;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            transition: all 0.2s ease;
+        }
+        .btn-gradient:active { transform: scale(0.96); }
+
+        .card-order {
+            border-left: 4px solid var(--primary);
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.05) 0%, transparent 100%);
+        }
+        .card-received {
+            border-left: 4px solid var(--success);
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
+        }
+
+        .loader {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .camera-btn { background-color: #262626; border: 2px dashed #444; padding: 20px; border-radius: 15px; text-align: center; cursor: pointer; }
-        .camera-btn.has-file { border-color: #22c55e; background-color: #064e3b; }
-        #modal-visor { background: rgba(0,0,0,0.95); display: none; position: fixed; inset: 0; z-index: 200; padding: 20px; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* Estilo para los filtros en Historial */
+        .filter-chip {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+        .filter-active {
+            background: white;
+            color: black;
+            border-color: white;
+        }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-28">
 
-    <header class="bg-black pt-8 pb-4 flex flex-col items-center border-b border-neutral-900">
-        <img src="image.jpg" alt="CVC Logo" class="h-14 mb-2">
-        <h1 class="text-[9px] tracking-[0.4em] uppercase opacity-40 font-black text-white">Logística y Suministros Viales</h1>
+    <!-- HEADER MEJORADO -->
+    <header class="pt-10 pb-6 px-6 flex flex-col items-center">
+        <div class="relative group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+            <img src="image.jpg" alt="CVC Logo" class="relative h-16 object-contain rounded-lg">
+        </div>
+        <p class="mt-4 text-[10px] tracking-[0.5em] uppercase font-extrabold text-amber-500 opacity-80">Logística y Suministros Viales</p>
     </header>
 
-    <nav class="bg-black sticky top-0 z-50 border-b border-neutral-900 shadow-2xl">
-        <div class="flex justify-around items-center h-16">
-            <button onclick="switchTab('emitir')" id="tab-emitir" class="flex-1 h-full font-bold uppercase text-[9px] flex flex-col justify-center items-center gap-1 tab-active">
-                <i class="fa-solid fa-file-circle-plus text-lg"></i><span>Emitir</span>
+    <!-- NAVEGACIÓN BOTTOM BAR (MÁS MODERNA) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-white/10 px-4 pb-6 pt-3">
+        <div class="flex justify-around items-center max-w-lg mx-auto">
+            <button onclick="switchTab('emitir')" id="tab-emitir" class="flex flex-col items-center gap-1 transition-all tab-active">
+                <i class="fa-solid fa-plus-circle text-xl"></i>
+                <span class="text-[10px] font-bold uppercase">Emitir</span>
             </button>
-            <button onclick="switchTab('recibir')" id="tab-recibir" class="flex-1 h-full font-bold uppercase text-[9px] flex flex-col justify-center items-center gap-1 text-neutral-500">
-                <i class="fa-solid fa-truck-moving text-lg"></i><span>Obras</span>
+            <button onclick="switchTab('recibir')" id="tab-recibir" class="flex flex-col items-center gap-1 transition-all text-slate-500">
+                <i class="fa-solid fa-clipboard-check text-xl"></i>
+                <span class="text-[10px] font-bold uppercase">Pendientes</span>
             </button>
-            <button onclick="switchTab('historial')" id="tab-historial" class="flex-1 h-full font-bold uppercase text-[9px] flex flex-col justify-center items-center gap-1 text-neutral-500">
-                <i class="fa-solid fa-magnifying-glass text-lg"></i><span>Historial</span>
+            <button onclick="switchTab('historial')" id="tab-historial" class="flex flex-col items-center gap-1 transition-all text-slate-500">
+                <i class="fa-solid fa-chart-pie text-xl"></i>
+                <span class="text-[10px] font-bold uppercase">Historial</span>
             </button>
-            <button onclick="switchTab('admin')" id="tab-admin" class="flex-1 h-full font-bold uppercase text-[9px] flex flex-col justify-center items-center gap-1 text-neutral-500">
-                <i class="fa-solid fa-database text-lg"></i><span>Datos</span>
+            <button onclick="switchTab('admin')" id="tab-admin" class="flex flex-col items-center gap-1 transition-all text-slate-500">
+                <i class="fa-solid fa-layer-group text-xl"></i>
+                <span class="text-[10px] font-bold uppercase">Datos</span>
             </button>
         </div>
     </nav>
 
     <div class="container mx-auto p-4 max-w-lg">
+        
+        <!-- VISTA: EMITIR -->
         <section id="view-emitir" class="space-y-6">
-            <div class="bg-neutral-900/40 p-6 rounded-3xl border border-neutral-800">
+            <div class="glass-card p-6 rounded-[2.5rem] space-y-5">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+                        <i class="fa-solid fa-file-pen text-amber-500"></i>
+                    </div>
+                    <h2 class="text-xl font-extrabold tracking-tight">Nueva Orden</h2>
+                </div>
+
                 <form id="form-oc" class="space-y-4">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Fecha Emisión</label>
-                            <input type="text" id="fecha-oc" readonly class="input-vial font-mono text-neutral-400">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Emisión (24h)</label>
+                            <input type="text" id="fecha-oc" readonly class="input-premium font-mono">
                         </div>
-                        <div>
-                            <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Entrega</label>
-                            <input type="date" id="fecha-entrega" class="input-vial text-neutral-300">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Entrega</label>
+                            <input type="date" id="fecha-entrega" class="input-premium">
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Maquinaria</label>
-                            <select id="select-maquinaria" class="input-vial bg-black">
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Maquinaria</label>
+                            <select id="select-maquinaria" class="input-premium appearance-none">
                                 <option value="GENERAL">GENERAL</option>
                                 <option value="CAMION">CAMIÓN</option>
                                 <option value="AUTO">AUTO</option>
                                 <option value="NIVELADORA">NIVELADORA</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Obra</label>
-                            <select id="select-obra" class="input-vial bg-black">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Obra / Destino</label>
+                            <select id="select-obra" class="input-premium appearance-none">
                                 <option value="RUTA 1">RUTA 1</option>
                                 <option value="RUTA 5">RUTA 5</option>
                                 <option value="TALLER">TALLER</option>
@@ -92,89 +203,147 @@
                             </select>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Proveedor</label>
-                            <select id="select-proveedor" required class="input-vial bg-black"><option value="">Cargando...</option></select>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Proveedor</label>
+                            <select id="select-proveedor" required class="input-premium"><option value="">Seleccionar</option></select>
                         </div>
-                        <div>
-                            <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Emisor</label>
-                            <select id="select-emisor" required class="input-vial bg-black"><option value="">Cargando...</option></select>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Emisor Autorizado</label>
+                            <select id="select-emisor" required class="input-premium"><option value="">Seleccionar</option></select>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Importe</label>
+
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Finanzas</label>
                         <div class="flex gap-2">
-                            <select id="select-moneda" class="w-1/3 input-vial bg-black"><option value="PESOS">PESOS ($)</option><option value="DOLARES">DOLARES (U$S)</option></select>
-                            <input type="number" id="input-precio" placeholder="Precio" class="flex-1 input-vial">
-                            <select id="select-iva" class="w-1/3 input-vial bg-black"><option value="CON IVA">CON IVA</option><option value="SIN IVA">SIN IVA</option></select>
+                            <select id="select-moneda" class="w-1/3 input-premium"><option value="PESOS">PESOS</option><option value="DOLARES">DOLARES</option></select>
+                            <input type="number" id="input-precio" placeholder="Monto" class="flex-1 input-premium">
+                            <select id="select-iva" class="w-1/3 input-premium"><option value="CON IVA">CON IVA</option><option value="SIN IVA">SIN IVA</option></select>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-[9px] font-black text-neutral-500 uppercase mb-1 tracking-widest ml-1">Detalle</label>
-                        <textarea id="detalle-oc" required rows="3" placeholder="Descripción..." class="input-vial"></textarea>
+
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Detalle del Pedido</label>
+                        <textarea id="detalle-oc" required rows="3" placeholder="Describe materiales, cantidades..." class="input-premium"></textarea>
                     </div>
-                    <button type="submit" id="btn-submit" class="w-full btn-primary py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-transform mt-2">
-                        <i class="fa-solid fa-paper-plane"></i> GENERAR ORDEN
+
+                    <button type="submit" id="btn-submit" class="w-full btn-gradient py-5 rounded-2xl flex items-center justify-center gap-3 mt-4">
+                        <i class="fa-solid fa-paper-plane"></i> Generar Orden de Compra
                     </button>
                 </form>
             </div>
         </section>
 
+        <!-- VISTA: PENDIENTES -->
         <section id="view-recibir" class="hidden space-y-4">
-            <h2 class="text-[10px] font-black uppercase tracking-widest text-neutral-500 ml-2">Órdenes pendientes</h2>
+            <div class="flex items-center justify-between px-2">
+                <h2 class="text-xl font-extrabold tracking-tight">Pendientes</h2>
+                <span class="bg-amber-500 text-black text-[10px] font-black px-2 py-1 rounded-full" id="count-pendientes">0</span>
+            </div>
             <div id="lista-pendientes" class="space-y-3"></div>
         </section>
 
+        <!-- VISTA: HISTORIAL (REDISEÑADO) -->
         <section id="view-historial" class="hidden space-y-4">
-            <div class="sticky top-16 z-40 bg-black pt-2 pb-4">
-                <input type="text" id="input-busqueda" oninput="filtrarHistorial()" placeholder="Buscar..." class="input-vial bg-neutral-900 mb-3">
-                <div class="flex gap-2">
-                    <button onclick="setFiltroEstado('TODAS')" id="btn-filtro-todas" class="flex-1 py-2 rounded-full text-[9px] font-black uppercase bg-white text-black">Todas</button>
-                    <button onclick="setFiltroEstado('PENDIENTE')" id="btn-filtro-pend" class="flex-1 py-2 rounded-full text-[9px] font-black uppercase bg-black text-neutral-500 border border-neutral-800">Pendientes</button>
-                    <button onclick="setFiltroEstado('RECIBIDA')" id="btn-filtro-reci" class="flex-1 py-2 rounded-full text-[9px] font-black uppercase bg-black text-neutral-500 border border-neutral-800">Recibidas</button>
+            <div class="glass-card p-6 rounded-[2.5rem] sticky top-4 z-40 border-white/5 space-y-4">
+                <div class="flex gap-2 p-1 bg-black/40 rounded-2xl">
+                    <button onclick="setFiltroEstado('TODAS')" id="btn-filtro-todas" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-xl bg-white text-black transition-all">Todas</button>
+                    <button onclick="setFiltroEstado('PENDIENTE')" id="btn-filtro-pend" class="flex-1 py-2 text-[10px] font-bold uppercase text-slate-400 transition-all">Pendientes</button>
+                    <button onclick="setFiltroEstado('RECIBIDA')" id="btn-filtro-reci" class="flex-1 py-2 text-[10px] font-bold uppercase text-slate-400 transition-all">Recibidas</button>
                 </div>
+
+                <div class="relative">
+                    <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                    <input type="text" id="input-busqueda" oninput="filtrarHistorial()" placeholder="Búsqueda rápida..." class="input-premium pl-12 bg-black/20">
+                </div>
+
+                <!-- Los 6 Filtros Especiales en Grid -->
+                <div class="grid grid-cols-2 gap-3 pt-2 border-t border-white/5">
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-slate-500 uppercase ml-1">Orden #</label>
+                        <input type="text" id="f-nro" oninput="filtrarHistorial()" placeholder="001" class="input-premium py-2 text-xs">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-slate-500 uppercase ml-1">Fecha</label>
+                        <input type="date" id="f-fecha" onchange="filtrarHistorial()" class="input-premium py-2 text-xs">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-slate-500 uppercase ml-1">Proveedor</label>
+                        <select id="f-proveedor" onchange="filtrarHistorial()" class="input-premium py-2 text-xs"><option value="">Todos</option></select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-slate-500 uppercase ml-1">Emisor</label>
+                        <select id="f-emisor" onchange="filtrarHistorial()" class="input-premium py-2 text-xs"><option value="">Todos</option></select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-slate-500 uppercase ml-1">Maquinaria</label>
+                        <select id="f-maquinaria" onchange="filtrarHistorial()" class="input-premium py-2 text-xs">
+                            <option value="">Todas</option><option value="GENERAL">GENERAL</option><option value="CAMION">CAMIÓN</option><option value="AUTO">AUTO</option><option value="NIVELADORA">NIVELADORA</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-slate-500 uppercase ml-1">Obra</label>
+                        <select id="f-obra" onchange="filtrarHistorial()" class="input-premium py-2 text-xs">
+                            <option value="">Todas</option><option value="RUTA 1">RUTA 1</option><option value="RUTA 5">RUTA 5</option><option value="TALLER">TALLER</option><option value="CANTERA">CANTERA</option><option value="OFICINA">OFICINA</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="limpiarFiltros()" class="w-full text-[9px] font-bold text-slate-400 hover:text-white uppercase tracking-tighter transition-all">Restablecer filtros</button>
             </div>
-            <div id="lista-historial" class="space-y-3"></div>
+
+            <div id="lista-historial" class="space-y-3 pt-4"></div>
         </section>
 
+        <!-- VISTA: DATOS -->
         <section id="view-admin" class="hidden space-y-6">
-            <div class="bg-neutral-900/40 p-6 rounded-3xl border border-neutral-800">
-                <h3 class="text-[10px] font-black uppercase mb-4 text-neutral-500">Nuevo Proveedor</h3>
+            <div class="glass-card p-6 rounded-[2.5rem] border-white/5">
+                <h3 class="text-sm font-bold uppercase text-slate-400 mb-4 tracking-widest">Maestro de Proveedores</h3>
                 <div class="flex gap-2">
-                    <input type="text" id="nuevo-prov" class="input-vial">
-                    <button onclick="agregarMaestro('proveedores', 'nuevo-prov')" class="bg-white text-black px-5 rounded-xl font-black text-xl">+</button>
+                    <input type="text" id="nuevo-prov" placeholder="Nombre empresa" class="input-premium">
+                    <button onclick="agregarMaestro('proveedores', 'nuevo-prov')" class="bg-indigo-500 text-white px-5 rounded-2xl font-black text-xl hover:bg-indigo-400 transition-all shadow-lg shadow-indigo-500/20">+</button>
                 </div>
             </div>
-            <div class="bg-neutral-900/40 p-6 rounded-3xl border border-neutral-800">
-                <h3 class="text-[10px] font-black uppercase mb-4 text-neutral-500">Nuevo Emisor</h3>
+            <div class="glass-card p-6 rounded-[2.5rem] border-white/5">
+                <h3 class="text-sm font-bold uppercase text-slate-400 mb-4 tracking-widest">Maestro de Emisores</h3>
                 <div class="flex gap-2">
-                    <input type="text" id="nuevo-emisor" class="input-vial">
-                    <button onclick="agregarMaestro('emisores', 'nuevo-emisor')" class="bg-white text-black px-5 rounded-xl font-black text-xl">+</button>
+                    <input type="text" id="nuevo-emisor" placeholder="Nombre completo" class="input-premium">
+                    <button onclick="agregarMaestro('emisores', 'nuevo-emisor')" class="bg-indigo-500 text-white px-5 rounded-2xl font-black text-xl hover:bg-indigo-400 transition-all shadow-lg shadow-indigo-500/20">+</button>
                 </div>
             </div>
         </section>
     </div>
 
-    <div id="modal-visor" onclick="this.style.display='none'"><img id="img-ampliada" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl mb-4"></div>
+    <!-- MODALES Y VISORES -->
+    <div id="modal-visor" onclick="this.style.display='none'"><img id="img-ampliada" class="max-w-[90%] max-h-[80vh] rounded-2xl shadow-2xl ring-4 ring-white/10"></div>
 
-    <div id="modal-recepcion" class="fixed inset-0 bg-black/95 hidden z-[100] flex items-center justify-center p-6">
-        <div class="bg-neutral-900 w-full max-w-sm p-8 rounded-[2rem] border border-neutral-800">
-            <h3 class="text-xl font-black mb-4 text-center uppercase" id="modal-title">RECIBIR OC</h3>
-            <p id="modal-desc" class="text-[10px] text-neutral-500 mb-6 text-center uppercase font-bold"></p>
-            <input type="text" id="input-receptor" placeholder="¿Quién recibe?" class="input-vial mb-4">
-            <label for="input-foto" id="label-foto" class="camera-btn block mb-6">
-                <i class="fa-solid fa-camera text-2xl mb-2 block"></i>
-                <span class="text-[10px] font-bold uppercase" id="foto-status">Capturar Foto Remito</span>
+    <div id="modal-recepcion" class="fixed inset-0 bg-slate-950/90 hidden z-[100] flex items-center justify-center p-6 backdrop-blur-md">
+        <div class="glass-card w-full max-w-sm p-8 rounded-[3rem] border-white/10">
+            <div class="flex flex-col items-center mb-6">
+                <div class="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-check-circle text-3xl text-emerald-500"></i>
+                </div>
+                <h3 class="text-xl font-extrabold uppercase tracking-tight" id="modal-title">Confirmar</h3>
+                <p id="modal-desc" class="text-xs text-slate-400 text-center mt-2"></p>
+            </div>
+            
+            <input type="text" id="input-receptor" placeholder="¿Quién certifica la llegada?" class="input-premium mb-4 text-center">
+            
+            <label for="input-foto" id="label-foto" class="camera-btn glass-card block mb-6 p-6 rounded-2xl text-center border-dashed border-2 border-white/10 cursor-pointer">
+                <i class="fa-solid fa-camera text-2xl mb-2 block text-slate-400"></i>
+                <span class="text-[10px] font-extrabold uppercase text-slate-500" id="foto-status">Capturar Foto del Remito</span>
                 <input type="file" id="input-foto" accept="image/*" capture="camera" class="hidden" onchange="procesarFoto()">
             </label>
+
             <div class="flex gap-3">
-                <button onclick="cerrarModal()" class="flex-1 border border-neutral-700 py-4 rounded-2xl font-black text-[10px] uppercase text-white">Cerrar</button>
-                <button onclick="confirmarRecepcion()" id="btn-certificar" class="flex-1 btn-primary py-4 rounded-2xl font-black text-[10px]">Confirmar</button>
+                <button onclick="cerrarModal()" class="flex-1 py-4 rounded-2xl font-bold text-xs uppercase text-slate-300 border border-white/10">Cerrar</button>
+                <button onclick="confirmarRecepcion()" id="btn-certificar" class="flex-1 btn-gradient py-4 rounded-2xl font-bold text-xs">Confirmar</button>
             </div>
         </div>
     </div>
 
+    <!-- Script de Lógica -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -216,15 +385,18 @@
             ['emitir', 'recibir', 'historial', 'admin'].forEach(t => {
                 document.getElementById(`view-${t}`).classList.add('hidden');
                 document.getElementById(`tab-${t}`).classList.remove('tab-active');
-                document.getElementById(`tab-${t}`).classList.add('text-neutral-500');
+                document.getElementById(`tab-${t}`).classList.add('text-slate-500');
             });
             document.getElementById(`view-${tab}`).classList.remove('hidden');
             document.getElementById(`tab-${tab}`).classList.add('tab-active');
-            document.getElementById(`tab-${tab}`).classList.remove('text-neutral-500');
+            document.getElementById(`tab-${tab}`).classList.remove('text-slate-500');
+            if(tab === 'historial') filtrarHistorial();
         };
 
         const ticTac = () => {
-            document.getElementById('fecha-oc').value = new Date().toLocaleString('es-UY', { dateStyle: 'short', timeStyle: 'short' });
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+            const now = new Date().toLocaleString('es-UY', options).replace(',', '');
+            document.getElementById('fecha-oc').value = now;
             setTimeout(ticTac, 30000);
         };
         ticTac();
@@ -232,13 +404,19 @@
         function escucharMaestros() {
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'proveedores'), (snap) => {
                 const select = document.getElementById('select-proveedor');
+                const fProv = document.getElementById('f-proveedor');
                 let list = []; snap.forEach(d => list.push(d.data().nombre));
-                select.innerHTML = '<option value="">Proveedor...</option>' + list.sort().map(n => `<option value="${n}">${n}</option>`).join('');
+                const html = list.sort().map(n => `<option value="${n}">${n}</option>`).join('');
+                select.innerHTML = '<option value="">Seleccionar</option>' + html;
+                fProv.innerHTML = '<option value="">Todos</option>' + html;
             });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'emisores'), (snap) => {
                 const select = document.getElementById('select-emisor');
+                const fEmisor = document.getElementById('f-emisor');
                 let list = []; snap.forEach(d => list.push(d.data().nombre));
-                select.innerHTML = '<option value="">Emisor...</option>' + list.sort().map(n => `<option value="${n}">${n}</option>`).join('');
+                const html = list.sort().map(n => `<option value="${n}">${n}</option>`).join('');
+                select.innerHTML = '<option value="">Seleccionar</option>' + html;
+                fEmisor.innerHTML = '<option value="">Todos</option>' + html;
             });
         }
 
@@ -247,23 +425,30 @@
                 todasLasOrdenes = [];
                 snap.forEach(doc => todasLasOrdenes.push({ id: doc.id, ...doc.data() }));
                 todasLasOrdenes.sort((a,b) => b.timestamp - a.timestamp);
-                renderizarObras();
+                renderizarPendientes();
                 filtrarHistorial();
             });
         }
 
-        function renderizarObras() {
+        function renderizarPendientes() {
             const container = document.getElementById('lista-pendientes');
             const pendientes = todasLasOrdenes.filter(o => o.estado === 'PENDIENTE');
-            if(pendientes.length === 0) { container.innerHTML = '<p class="text-center py-20 opacity-20 text-[10px] font-bold">Sin órdenes</p>'; return; }
+            document.getElementById('count-pendientes').innerText = pendientes.length;
+            if(pendientes.length === 0) { 
+                container.innerHTML = '<div class="flex flex-col items-center py-20 opacity-20"><i class="fa-solid fa-box-open text-6xl mb-4"></i><p class="text-[10px] font-black uppercase">Sin pedidos en curso</p></div>'; 
+                return; 
+            }
             container.innerHTML = pendientes.map(o => `
-                <div onclick="abrirModal('${o.id}', '${o.correlativo}', '${o.proveedor}')" class="card-oc p-4 rounded-2xl mb-2">
-                    <div class="flex justify-between items-center mb-1 text-white">
-                        <span class="font-black text-sm text-yellow-500">${o.correlativo}</span>
-                        <span class="text-[8px] opacity-40 font-bold uppercase">${o.fecha}</span>
+                <div onclick="abrirModal('${o.id}', '${o.correlativo}', '${o.proveedor}')" class="glass-card card-order p-5 rounded-[2rem] active:scale-[0.98] transition-all">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="px-3 py-1 rounded-full bg-amber-500 text-black font-black text-[10px] shadow-lg shadow-amber-500/20">${o.correlativo}</span>
+                        <span class="text-[9px] font-bold text-slate-500 uppercase">${o.fecha}</span>
                     </div>
-                    <div class="text-[10px] font-black uppercase text-white">${o.proveedor}</div>
-                    <div class="text-[9px] text-neutral-500 mt-1">Obra: ${o.obra}</div>
+                    <div class="text-sm font-extrabold text-white mb-1">${o.proveedor}</div>
+                    <div class="flex items-center gap-4 text-[10px] text-slate-400 font-bold">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> ${o.obra}</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-gear"></i> ${o.maquinaria}</span>
+                    </div>
                 </div>
             `).join('');
         }
@@ -272,35 +457,86 @@
             filtroEstadoActual = estado;
             ['todas', 'pend', 'reci'].forEach(f => {
                 const btn = document.getElementById(`btn-filtro-${f}`);
-                btn.classList.toggle('bg-white', f === (estado === 'TODAS' ? 'todas' : (estado === 'PENDIENTE' ? 'pend' : 'reci')));
-                btn.classList.toggle('text-black', f === (estado === 'TODAS' ? 'todas' : (estado === 'PENDIENTE' ? 'pend' : 'reci')));
+                const isSelected = f === (estado === 'TODAS' ? 'todas' : (estado === 'PENDIENTE' ? 'pend' : 'reci'));
+                btn.classList.toggle('bg-white', isSelected);
+                btn.classList.toggle('text-black', isSelected);
+                btn.classList.toggle('text-slate-400', !isSelected);
             });
             filtrarHistorial();
+        };
+
+        window.limpiarFiltros = () => {
+            document.getElementById('input-busqueda').value = "";
+            document.getElementById('f-nro').value = "";
+            document.getElementById('f-fecha').value = "";
+            document.getElementById('f-proveedor').value = "";
+            document.getElementById('f-emisor').value = "";
+            document.getElementById('f-maquinaria').value = "";
+            document.getElementById('f-obra').value = "";
+            setFiltroEstado('TODAS');
+        };
+
+        window.filtrarHistorial = () => {
+            const queryText = document.getElementById('input-busqueda').value.toLowerCase();
+            const nroText = document.getElementById('f-nro').value.toLowerCase();
+            const fechaVal = document.getElementById('f-fecha').value;
+            const provVal = document.getElementById('f-proveedor').value;
+            const emiVal = document.getElementById('f-emisor').value;
+            const maqVal = document.getElementById('f-maquinaria').value;
+            const obraVal = document.getElementById('f-obra').value;
+            
+            const container = document.getElementById('lista-historial');
+
+            const filtradas = todasLasOrdenes.filter(o => {
+                const matchEstado = (filtroEstadoActual === 'TODAS' || o.estado === filtroEstadoActual);
+                if (!matchEstado) return false;
+
+                const matchBusqueda = !queryText || o.correlativo.toLowerCase().includes(queryText) || o.proveedor.toLowerCase().includes(queryText) || o.detalle.toLowerCase().includes(queryText);
+                const matchNro = !nroText || o.correlativo.toLowerCase().includes(nroText);
+                
+                let matchFecha = true;
+                if(fechaVal) {
+                    const [y, m, d] = fechaVal.split('-');
+                    matchFecha = o.fecha.includes(`${d}/${m}/${y}`);
+                }
+
+                const matchProv = !provVal || o.proveedor === provVal;
+                const matchEmi = !emiVal || o.emisor === emiVal;
+                const matchMaq = !maqVal || o.maquinaria === maqVal;
+                const matchObra = !obraVal || o.obra === obraVal;
+
+                return matchBusqueda && matchNro && matchFecha && matchProv && matchEmi && matchMaq && matchObra;
+            });
+
+            if(filtradas.length === 0) {
+                container.innerHTML = '<div class="text-center py-20 opacity-20"><p class="text-[10px] font-black uppercase tracking-widest">Sin resultados</p></div>';
+                return;
+            }
+
+            container.innerHTML = filtradas.map(o => `
+                <div class="glass-card ${o.estado === 'RECIBIDA' ? 'card-received' : 'card-order'} p-4 rounded-[2rem] border-white/5">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-black ${o.estado === 'RECIBIDA' ? 'text-emerald-500' : 'text-amber-500'}">${o.correlativo}</span>
+                            <span class="text-[8px] font-bold uppercase text-slate-500">${o.estado}</span>
+                        </div>
+                        <span class="text-[9px] font-bold text-slate-600">${o.fecha}</span>
+                    </div>
+                    <div class="text-[12px] font-extrabold uppercase text-white">${o.proveedor}</div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div class="flex gap-3 text-[8px] font-bold text-slate-400 uppercase">
+                            <span><i class="fa-solid fa-map-pin mr-1 text-slate-600"></i>${o.obra}</span>
+                            <span><i class="fa-solid fa-user-pen mr-1 text-slate-600"></i>${o.emisor}</span>
+                        </div>
+                        ${o.url_foto_remito ? `<button onclick="verFoto('${o.url_foto_remito}')" class="bg-indigo-500/10 text-indigo-400 px-3 py-1.5 rounded-full text-[8px] font-black uppercase ring-1 ring-indigo-500/20">Ver Remito</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
         };
 
         window.verFoto = (data) => {
             document.getElementById('img-ampliada').src = data;
             document.getElementById('modal-visor').style.display = 'flex';
-        };
-
-        window.filtrarHistorial = () => {
-            const queryText = document.getElementById('input-busqueda').value.toLowerCase();
-            const container = document.getElementById('lista-historial');
-            const filtradas = todasLasOrdenes.filter(o => {
-                const match = o.correlativo.toLowerCase().includes(queryText) || o.proveedor.toLowerCase().includes(queryText) || o.obra.toLowerCase().includes(queryText);
-                return match && (filtroEstadoActual === 'TODAS' || o.estado === filtroEstadoActual);
-            });
-            container.innerHTML = filtradas.map(o => `
-                <div class="card-oc ${o.estado === 'RECIBIDA' ? 'card-recibida' : ''} p-4 rounded-xl mb-2">
-                    <div class="flex justify-between text-[9px] font-black uppercase mb-1">
-                        <span class="${o.estado === 'RECIBIDA' ? 'text-green-500' : 'text-yellow-500'}">${o.correlativo} [${o.estado}]</span>
-                        <span class="opacity-40">${o.fecha}</span>
-                    </div>
-                    <div class="text-[10px] font-black uppercase text-white">${o.proveedor}</div>
-                    <div class="text-[9px] text-neutral-500">Obra: ${o.obra}</div>
-                    ${o.url_foto_remito ? `<button onclick="verFoto('${o.url_foto_remito}')" class="text-[8px] text-blue-400 underline font-bold mt-2 block uppercase"><i class="fa-solid fa-image mr-1"></i> Ver Remito</button>` : ''}
-                </div>
-            `).join('');
         };
 
         window.procesarFoto = () => {
@@ -318,8 +554,9 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     base64Foto = canvas.toDataURL('image/jpeg', 0.6);
-                    document.getElementById('label-foto').classList.add('has-file');
-                    document.getElementById('foto-status').innerText = "Capturado ✓";
+                    document.getElementById('label-foto').style.borderColor = 'var(--success)';
+                    document.getElementById('foto-status').innerHTML = "Remito capturado <i class='fa-solid fa-check ml-1'></i>";
+                    document.getElementById('foto-status').classList.add('text-emerald-500');
                 };
                 img.src = e.target.result;
             };
@@ -356,11 +593,11 @@
                 const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'ordenes'));
                 data.correlativo = `OC-${String(snap.size + 1).padStart(3, '0')}`;
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'ordenes'), data);
-                const msg = `🚛 *CVC - NUEVA OC*%0A*Nro:* ${data.correlativo}%0A*Obra:* ${data.obra}%0A*Detalle:* ${data.detalle}`;
+                const msg = `🚛 *NUEVA ORDEN CVC* %0A*Nro:* ${data.correlativo}%0A*Proveedor:* ${data.proveedor}%0A*Obra:* ${data.obra}%0A*Detalle:* ${data.detalle}`;
                 window.open(`https://wa.me/${WHATSAPP_CONTACTO}?text=${msg}`, '_blank');
                 document.getElementById('form-oc').reset();
-            } catch (err) { alert("Error"); }
-            btn.disabled = false; btn.innerHTML = 'GENERAR ORDEN';
+            } catch (err) { alert("Error al guardar en la nube."); }
+            btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Generar Orden';
         };
 
         let currentId, currentNum;
@@ -368,8 +605,8 @@
             currentId = id; currentNum = num;
             document.getElementById('modal-desc').innerText = `${num} | ${prov}`;
             document.getElementById('modal-recepcion').classList.remove('hidden');
-            document.getElementById('label-foto').classList.remove('has-file');
-            document.getElementById('foto-status').innerText = "Capturar Foto Remito";
+            document.getElementById('foto-status').innerText = "Capturar Foto del Remito";
+            document.getElementById('label-foto').style.borderColor = 'rgba(255,255,255,0.1)';
             base64Foto = "";
         };
 
@@ -378,20 +615,18 @@
         window.confirmarRecepcion = async () => {
             const rec = document.getElementById('input-receptor').value.trim();
             const btn = document.getElementById('btn-certificar');
-            if(!rec || !base64Foto) { alert("Complete datos y foto"); return; }
+            if(!rec || !base64Foto) { alert("Por favor completa el nombre y la foto del remito."); return; }
             btn.disabled = true; btn.innerHTML = '<div class="loader"></div>';
             try {
                 const refDoc = doc(db, 'artifacts', appId, 'public', 'data', 'ordenes', currentId);
                 const ahora = new Date().toLocaleString('es-UY');
                 await updateDoc(refDoc, { estado: 'RECIBIDA', receptor: rec, fecha_recepcion: ahora, url_foto_remito: base64Foto });
-                const msg = `✅ *CVC - RECIBIDO*%0AOC *#${currentNum}* recibida por *${rec}*.`;
+                const msg = `✅ *CVC RECIBIDO* %0AOC *#${currentNum}* recibida por *${rec}*.`;
                 cerrarModal();
                 window.open(`https://wa.me/${WHATSAPP_CONTACTO}?text=${encodeURIComponent(msg)}`, '_blank');
-            } catch (e) { alert("Error"); }
+            } catch (e) { alert("Error al confirmar."); }
             btn.disabled = false; btn.innerHTML = 'Confirmar';
         };
     </script>
 </body>
 </html>
-
-```
