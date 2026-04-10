@@ -3,54 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CVC Vial - Gesti\u00f3n Profesional</title>
+    <title>CVC Vial - Rose Edition</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#F0F4FF">
+    <meta name="theme-color" content="#fff1f2">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="CVC Vial">
     <link rel="apple-touch-icon" href="image.jpg">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#4F46E5',
-                        secondary: '#F59E0B',
-                        neutral: {
-                            base: '#F0F4FF',
-                            text: '#1E1B4B',
-                            muted: '#6B7280',
-                        },
-                    }
-                }
-            }
-        }
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         
         :root {
-            --indigo-primary: #4F46E5;
-            --indigo-dark: #3730A3;
-            --indigo-light: #818CF8;
-            --amber-accent: #F59E0B;
-            --amber-dark: #D97706;
-            --bg-neutral: #F0F4FF;
-            --success-green: #10B981;
+            --rose-primary: #fda4af;
+            --rose-dark: #fb7185;
+            --bg-pastel: #fff1f2;
+            --accent-blue: #93c5fd;
         }
 
         body {
-            background-color: var(--bg-neutral);
+            background-color: var(--bg-pastel);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.08) 0px, transparent 55%),
-                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.06) 0px, transparent 50%),
-                radial-gradient(at 50% 50%, rgba(129, 140, 248, 0.04) 0px, transparent 60%);
-            color: #1E1B4B;
+                radial-gradient(at 0% 0%, rgba(251, 113, 133, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(147, 197, 253, 0.05) 0px, transparent 50%);
+            color: #4c1d24;
             font-family: 'Plus Jakarta Sans', sans-serif;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -58,14 +37,14 @@
         }
 
         .soft-glass {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 30px -5px rgba(79, 70, 229, 0.08), 0 4px 10px -2px rgba(79, 70, 229, 0.04);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 25px -5px rgba(225, 29, 72, 0.05);
         }
 
         .tab-active {
-            color: var(--indigo-primary);
+            color: var(--rose-dark);
             position: relative;
             font-weight: 800;
         }
@@ -76,14 +55,14 @@
             left: 30%;
             width: 40%;
             height: 4px;
-            background: linear-gradient(90deg, var(--indigo-primary), var(--indigo-light));
+            background: linear-gradient(90deg, var(--rose-primary), var(--rose-dark));
             border-radius: 10px;
         }
 
         .input-rose {
             background: #ffffff;
-            border: 1.5px solid #E0E7FF;
-            color: #1E1B4B;
+            border: 1.5px solid #ffe4e6;
+            color: #4c1d24;
             border-radius: 16px;
             padding: 12px;
             width: 100%;
@@ -92,27 +71,27 @@
         }
         .input-rose:focus {
             outline: none;
-            border-color: var(--indigo-primary);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            border-color: var(--rose-primary);
+            box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.1);
         }
 
         .btn-rose {
-            background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+            background: linear-gradient(135deg, #fda4af 0%, #fb7185 100%);
             color: #ffffff;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+            box-shadow: 0 8px 15px rgba(251, 113, 133, 0.25);
             transition: transform 0.1s;
         }
         .btn-rose:active { transform: scale(0.97); }
 
-        .card-order { border-left: 6px solid var(--amber-accent); }
-        .card-received { border-left: 6px solid var(--success-green); }
+        .card-order { border-left: 6px solid var(--rose-primary); }
+        .card-received { border-left: 6px solid #86efac; }
 
         .loader {
-            border: 3px solid #E0E7FF;
-            border-top: 3px solid var(--indigo-primary);
+            border: 3px solid #fce7f3;
+            border-top: 3px solid var(--rose-dark);
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -123,90 +102,42 @@
 
         /* Estilo para los filtros en Historial */
         .filter-container {
-            background: #ffffff;
+            background: #fffafa;
             border-radius: 28px;
             padding: 24px;
-            box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.1);
-        }
-
-        /* Badge de pendientes con color \u00e1mbar */
-        #count-pendientes {
-            background: linear-gradient(135deg, var(--amber-accent), var(--amber-dark));
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        }
-
-        /* Acento en header */
-        .header-accent {
-            background: linear-gradient(90deg, var(--indigo-primary), var(--indigo-light));
-        }
-
-        /* Icono de secci\u00f3n con gradiente \u00edndigo */
-        .section-icon {
-            background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
-            color: var(--indigo-primary);
-        }
-
-        /* Chip de correlativo en pendientes */
-        .chip-order {
-            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
-            color: #92400E;
-        }
-
-        /* Nav bar con borde superior de acento */
-        nav {
-            border-top: 3px solid transparent;
-            background-image: linear-gradient(white, white), linear-gradient(90deg, var(--indigo-primary), var(--amber-accent));
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-        }
-
-        /* Bot\u00f3n de restablecer filtros */
-        .btn-reset-filters {
-            color: #9CA3AF;
-            transition: color 0.2s;
-        }
-        .btn-reset-filters:hover {
-            color: var(--indigo-primary);
-        }
-
-        /* Selector de estado activo en historial */
-        .filtro-activo {
-            background: white;
-            color: var(--indigo-dark);
-            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.12);
-        }
-        .filtro-inactivo {
-            color: #9CA3AF;
+            box-shadow: 0 15px 35px -10px rgba(225, 29, 72, 0.08);
         }
     </style>
 </head>
 <body class="pb-36">
 
+    <!-- HEADER DELICADO -->
     <header class="pt-14 pb-8 px-6 flex flex-col items-center">
-        <div class="p-4 bg-white rounded-[2rem] shadow-sm border border-indigo-100">
+        <div class="p-4 bg-white rounded-[2rem] shadow-sm border border-rose-50">
             <img src="image.jpg" alt="CVC Logo" class="h-16 object-contain">
         </div>
         <div class="mt-6 flex flex-col items-center">
-            <h1 class="text-[10px] tracking-[0.6em] uppercase font-black text-indigo-300">Gesti\u00f3n Viales</h1>
-            <div class="w-10 h-1 header-accent mt-2 rounded-full"></div>
+            <h1 class="text-[10px] tracking-[0.6em] uppercase font-black text-rose-300">Gestión Viales</h1>
+            <div class="w-10 h-1 bg-rose-200 mt-2 rounded-full"></div>
         </div>
     </header>
 
+    <!-- BARRA DE NAVEGACIÓN ROSE -->
     <nav class="fixed bottom-8 left-6 right-6 z-50 soft-glass rounded-[2.5rem] px-2 py-4 border-white/60">
         <div class="flex justify-around items-center">
             <button onclick="switchTab('emitir')" id="tab-emitir" class="flex flex-col items-center gap-1 transition-all tab-active">
                 <i class="fa-solid fa-plus-circle text-2xl"></i>
                 <span class="text-[9px] uppercase font-extrabold tracking-tighter">Emitir</span>
             </button>
-            <button onclick="switchTab('recibir')" id="tab-recibir" class="flex flex-col items-center gap-1 transition-all text-neutral-400">
+            <button onclick="switchTab('recibir')" id="tab-recibir" class="flex flex-col items-center gap-1 transition-all text-rose-200">
                 <i class="fa-solid fa-clipboard-check text-2xl"></i>
                 <span class="text-[9px] uppercase font-extrabold tracking-tighter">Pendientes</span>
             </button>
-            <button onclick="switchTab('historial')" id="tab-historial" class="flex flex-col items-center gap-1 transition-all text-neutral-400">
+            <button onclick="switchTab('historial')" id="tab-historial" class="flex flex-col items-center gap-1 transition-all text-rose-200">
                 <i class="fa-solid fa-folder-open text-2xl"></i>
                 <span class="text-[9px] uppercase font-extrabold tracking-tighter">Historial</span>
             </button>
-            <button onclick="switchTab('admin')" id="tab-admin" class="flex flex-col items-center gap-1 transition-all text-neutral-400">
+            <button onclick="switchTab('admin')" id="tab-admin" class="flex flex-col items-center gap-1 transition-all text-rose-200">
                 <i class="fa-solid fa-cog text-2xl"></i>
                 <span class="text-[9px] uppercase font-extrabold tracking-tighter">Datos</span>
             </button>
@@ -215,42 +146,43 @@
 
     <div class="container mx-auto p-4 max-w-lg">
         
+        <!-- VISTA: EMISIÓN -->
         <section id="view-emitir" class="space-y-6">
             <div class="soft-glass p-8 rounded-[3rem]">
                 <div class="flex items-center gap-4 mb-8">
-                    <span class="w-12 h-12 section-icon rounded-2xl flex items-center justify-center shadow-inner">
+                    <span class="w-12 h-12 bg-rose-100 text-rose-500 rounded-2xl flex items-center justify-center shadow-inner">
                         <i class="fa-solid fa-feather-pointed text-xl"></i>
                     </span>
                     <div>
-                        <h2 class="text-2xl font-extrabold text-indigo-950 tracking-tight">Nueva Orden</h2>
-                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Formulario de registro</p>
+                        <h2 class="text-2xl font-extrabold text-rose-900 tracking-tight">Nueva Orden</h2>
+                        <p class="text-[10px] text-rose-400 font-bold uppercase tracking-widest">Formulario de registro</p>
                     </div>
                 </div>
 
                 <form id="form-oc" class="space-y-5">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-1.5">
-                            <label class="text-[10px] font-black text-neutral-400 uppercase ml-2">Fecha Emisi\u00f3n</label>
-                            <input type="text" id="fecha-oc" readonly class="input-rose bg-neutral-100/30 font-mono text-xs">
+                            <label class="text-[10px] font-black text-rose-300 uppercase ml-2">Fecha Emisión</label>
+                            <input type="text" id="fecha-oc" readonly class="input-rose bg-rose-50/30 font-mono text-xs">
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-[10px] font-black text-neutral-400 uppercase ml-2">Entrega Prevista</label>
+                            <label class="text-[10px] font-black text-rose-300 uppercase ml-2">Entrega Prevista</label>
                             <input type="date" id="fecha-entrega" class="input-rose text-xs">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-1.5">
-                            <label class="text-[10px] font-black text-neutral-400 uppercase ml-2">Maquinaria</label>
+                            <label class="text-[10px] font-black text-rose-300 uppercase ml-2">Maquinaria</label>
                             <select id="select-maquinaria" class="input-rose appearance-none">
                                 <option value="GENERAL">GENERAL</option>
-                                <option value="CAMION">CAMI\u00d3N</option>
+                                <option value="CAMION">CAMIÓN</option>
                                 <option value="AUTO">AUTO</option>
                                 <option value="NIVELADORA">NIVELADORA</option>
                             </select>
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-[10px] font-black text-neutral-400 uppercase ml-2">Obra Destino</label>
+                            <label class="text-[10px] font-black text-rose-300 uppercase ml-2">Obra Destino</label>
                             <select id="select-obra" class="input-rose appearance-none">
                                 <option value="RUTA 1">RUTA 1</option>
                                 <option value="RUTA 5">RUTA 5</option>
@@ -263,17 +195,17 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-1.5">
-                            <label class="text-[10px] font-black text-neutral-400 uppercase ml-2">Proveedor</label>
+                            <label class="text-[10px] font-black text-rose-300 uppercase ml-2">Proveedor</label>
                             <select id="select-proveedor" required class="input-rose"><option value="">Seleccionar</option></select>
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-[10px] font-black text-neutral-400 uppercase ml-2">Emisor</label>
+                            <label class="text-[10px] font-black text-rose-300 uppercase ml-2">Emisor</label>
                             <select id="select-emisor" required class="input-rose"><option value="">Seleccionar</option></select>
                         </div>
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-[10px] font-black text-neutral-400 uppercase ml-2">Presupuesto</label>
+                        <label class="text-[10px] font-black text-rose-300 uppercase ml-2">Presupuesto</label>
                         <div class="flex gap-2">
                             <select id="select-moneda" class="w-1/3 input-rose text-xs font-bold"><option value="PESOS">PESOS</option><option value="DOLARES">DOLARES</option></select>
                             <input type="number" id="input-precio" placeholder="0.00" class="flex-1 input-rose font-bold">
@@ -282,7 +214,7 @@
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-[10px] font-black text-neutral-400 uppercase ml-2">Detalle de Materiales</label>
+                        <label class="text-[10px] font-black text-rose-300 uppercase ml-2">Detalle de Materiales</label>
                         <textarea id="detalle-oc" required rows="3" placeholder="Ej: Herramientas, Gasoil, Repuestos..." class="input-rose"></textarea>
                     </div>
 
@@ -293,16 +225,398 @@
             </div>
         </section>
 
+        <!-- PENDIENTES -->
         <section id="view-recibir" class="hidden space-y-6">
             <div class="flex items-center justify-between px-4">
-                <h2 class="text-2xl font-extrabold text-indigo-950">Pendientes</h2>
-                <span class="text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg" id="count-pendientes">0</span>
+                <h2 class="text-2xl font-extrabold text-rose-900">Pendientes</h2>
+                <span class="bg-rose-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg" id="count-pendientes">0</span>
             </div>
             <div id="lista-pendientes" class="space-y-4"></div>
         </section>
 
+        <!-- HISTORIAL -->
         <section id="view-historial" class="hidden space-y-8">
             <div class="filter-container space-y-6">
-                <div class="flex gap-2 p-1.5 bg-indigo-50 rounded-2xl">
-                    <button onclick="setFiltroEstado('TODAS')" id="btn-filtro-todas" class="flex-1 py-3 text-[10px] font-black uppercase rounded-xl filtro-activo transition-all">Todas</button>
-                    <button onclick="setFiltroEstado('PENDIENTE')" id="btn-filtro-p
+                <!-- 1. Estado Mandatorio -->
+                <div class="flex gap-2 p-1.5 bg-rose-50 rounded-2xl">
+                    <button onclick="setFiltroEstado('TODAS')" id="btn-filtro-todas" class="flex-1 py-3 text-[10px] font-black uppercase rounded-xl bg-white text-rose-900 shadow-sm transition-all">Todas</button>
+                    <button onclick="setFiltroEstado('PENDIENTE')" id="btn-filtro-pend" class="flex-1 py-3 text-[10px] font-black uppercase text-rose-300 transition-all">Pendientes</button>
+                    <button onclick="setFiltroEstado('RECIBIDA')" id="btn-filtro-reci" class="flex-1 py-3 text-[10px] font-black uppercase text-rose-300 transition-all">Recibidas</button>
+                </div>
+
+                <!-- 2. Buscador -->
+                <div class="relative">
+                    <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-rose-200"></i>
+                    <input type="text" id="input-busqueda" oninput="filtrarHistorial()" placeholder="Búsqueda libre..." class="input-rose pl-12 border-none bg-rose-50/50">
+                </div>
+
+                <!-- 3. Los 6 Menús -->
+                <div class="grid grid-cols-2 gap-4 pt-6 border-t border-rose-100">
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-rose-300 uppercase ml-2">Nro de Orden</label>
+                        <input type="text" id="f-nro" oninput="filtrarHistorial()" placeholder="000" class="input-rose py-2 text-xs">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-rose-300 uppercase ml-2">Fecha</label>
+                        <input type="date" id="f-fecha" onchange="filtrarHistorial()" class="input-rose py-2 text-xs">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-rose-300 uppercase ml-2">Proveedor</label>
+                        <select id="f-proveedor" onchange="filtrarHistorial()" class="input-rose py-2 text-xs"><option value="">Todos</option></select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-rose-300 uppercase ml-2">Emisor</label>
+                        <select id="f-emisor" onchange="filtrarHistorial()" class="input-rose py-2 text-xs"><option value="">Todos</option></select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-rose-300 uppercase ml-2">Maquinaria</label>
+                        <select id="f-maquinaria" onchange="filtrarHistorial()" class="input-rose py-2 text-xs">
+                            <option value="">Todas</option><option value="GENERAL">GENERAL</option><option value="CAMION">CAMIÓN</option><option value="AUTO">AUTO</option><option value="NIVELADORA">NIVELADORA</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[8px] font-black text-rose-300 uppercase ml-2">Obra</label>
+                        <select id="f-obra" onchange="filtrarHistorial()" class="input-rose py-2 text-xs">
+                            <option value="">Todas</option><option value="RUTA 1">RUTA 1</option><option value="RUTA 5">RUTA 5</option><option value="TALLER">TALLER</option><option value="CANTERA">CANTERA</option><option value="OFICINA">OFICINA</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="limpiarFiltros()" class="w-full text-[9px] font-black text-rose-300 hover:text-rose-600 uppercase transition-all tracking-widest">Restablecer filtros</button>
+            </div>
+
+            <div id="lista-historial" class="space-y-4"></div>
+        </section>
+
+        <!-- DATOS -->
+        <section id="view-admin" class="hidden space-y-6">
+            <div class="soft-glass p-8 rounded-[3rem]">
+                <h3 class="text-xs font-black uppercase text-rose-300 mb-6 tracking-widest">Añadir Proveedor</h3>
+                <div class="flex gap-2">
+                    <input type="text" id="nuevo-prov" placeholder="Empresa" class="input-rose">
+                    <button onclick="agregarMaestro('proveedores', 'nuevo-prov')" class="btn-rose px-6 rounded-2xl text-xl">+</button>
+                </div>
+            </div>
+            <div class="soft-glass p-8 rounded-[3rem]">
+                <h3 class="text-xs font-black uppercase text-rose-300 mb-6 tracking-widest">Añadir Emisor</h3>
+                <div class="flex gap-2">
+                    <input type="text" id="nuevo-emisor" placeholder="Nombre completo" class="input-rose">
+                    <button onclick="agregarMaestro('emisores', 'nuevo-emisor')" class="btn-rose px-6 rounded-2xl text-xl">+</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- MODALES -->
+    <div id="modal-visor" onclick="this.style.display='none'" class="fixed inset-0 bg-rose-950/80 hidden z-[100] p-6 flex items-center justify-center backdrop-blur-md">
+        <img id="img-ampliada" class="max-w-full max-h-[85vh] rounded-[2rem] shadow-2xl border-4 border-white/20">
+    </div>
+
+    <div id="modal-recepcion" class="fixed inset-0 bg-rose-950/60 hidden z-[100] flex items-center justify-center p-6 backdrop-blur-lg">
+        <div class="bg-white w-full max-w-sm p-10 rounded-[3.5rem] shadow-2xl">
+            <div class="flex flex-col items-center mb-8 text-center">
+                <span class="w-16 h-16 bg-rose-50 text-rose-400 rounded-full flex items-center justify-center mb-4 text-3xl">
+                    <i class="fa-solid fa-stamp"></i>
+                </span>
+                <h3 class="text-2xl font-black text-rose-900 uppercase" id="modal-title">Certificar</h3>
+                <p id="modal-desc" class="text-xs text-rose-300 mt-2 font-bold"></p>
+            </div>
+            
+            <input type="text" id="input-receptor" placeholder="Nombre de quien recibe" class="input-rose mb-5 text-center font-bold">
+            
+            <label for="input-foto" id="label-foto" class="block mb-8 p-8 rounded-[2rem] text-center border-2 border-dashed border-rose-100 bg-rose-50/30 cursor-pointer">
+                <i class="fa-solid fa-camera-retro text-3xl mb-2 block text-rose-200"></i>
+                <span class="text-[10px] font-black uppercase text-rose-300" id="foto-status">Capturar Remito</span>
+                <input type="file" id="input-foto" accept="image/*" capture="camera" class="hidden" onchange="procesarFoto()">
+            </label>
+
+            <div class="flex gap-4">
+                <button onclick="cerrarModal()" class="flex-1 py-4 rounded-2xl font-bold text-xs uppercase text-rose-300 bg-rose-50">Cerrar</button>
+                <button onclick="confirmarRecepcion()" id="btn-certificar" class="flex-1 btn-rose py-4 rounded-2xl font-bold text-xs">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaETq5Inlj1h7jVoVOXJsSfxGK9i2uiMA",
+            authDomain: "fir-cvc-e153e.firebaseapp.com",
+            projectId: "fir-cvc-e153e",
+            storageBucket: "fir-cvc-e153e.firebasestorage.app",
+            messagingSenderId: "920360191032",
+            appId: "1:920360191032:web:0aea153d1cc0785a0e52cd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = "cvc-vial-prod";
+        const WHATSAPP_CONTACTO = "59894798639";
+
+        let todasLasOrdenes = [];
+        let filtroEstadoActual = 'TODAS';
+        let base64Foto = "";
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) { await bootstrapDatos(); escucharMaestros(); escucharOrdenes(); }
+            else { signInAnonymously(auth); }
+        });
+
+        async function bootstrapDatos() {
+            const pRef = collection(db, 'artifacts', appId, 'public', 'data', 'proveedores');
+            const eRef = collection(db, 'artifacts', appId, 'public', 'data', 'emisores');
+            const [pSnap, eSnap] = await Promise.all([getDocs(pRef), getDocs(eRef)]);
+            if(pSnap.empty) ["FERRETERIA EL COSITO", "MANGUERAS CASTILLO", "ENGRANAJES LA TUERCA", "PAPELERIA SANCHEZ"].forEach(n => addDoc(pRef, {nombre: n}));
+            if(eSnap.empty) ["JULIO RODRIGUEZ", "CARLOS PEREZ", "FERNANDO BLANCO", "AGUSTIN CENTURION"].forEach(n => addDoc(eRef, {nombre: n}));
+        }
+
+        window.switchTab = (tab) => {
+            ['emitir', 'recibir', 'historial', 'admin'].forEach(t => {
+                document.getElementById(`view-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).classList.remove('tab-active');
+                document.getElementById(`tab-${t}`).classList.add('text-rose-200');
+            });
+            document.getElementById(`view-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('tab-active');
+            document.getElementById(`tab-${tab}`).classList.remove('text-rose-200');
+            if(tab === 'historial') filtrarHistorial();
+        };
+
+        const ticTac = () => {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+            const now = new Date().toLocaleString('es-UY', options).replace(',', '');
+            document.getElementById('fecha-oc').value = now;
+            setTimeout(ticTac, 30000);
+        };
+        ticTac();
+
+        function escucharMaestros() {
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'proveedores'), (snap) => {
+                const select = document.getElementById('select-proveedor');
+                const fProv = document.getElementById('f-proveedor');
+                let list = []; snap.forEach(d => list.push(d.data().nombre));
+                const html = list.sort().map(n => `<option value="${n}">${n}</option>`).join('');
+                select.innerHTML = '<option value="">Seleccionar</option>' + html;
+                fProv.innerHTML = '<option value="">Todos</option>' + html;
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'emisores'), (snap) => {
+                const select = document.getElementById('select-emisor');
+                const fEmisor = document.getElementById('f-emisor');
+                let list = []; snap.forEach(d => list.push(d.data().nombre));
+                const html = list.sort().map(n => `<option value="${n}">${n}</option>`).join('');
+                select.innerHTML = '<option value="">Seleccionar</option>' + html;
+                fEmisor.innerHTML = '<option value="">Todos</option>' + html;
+            });
+        }
+
+        function escucharOrdenes() {
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'ordenes'), (snap) => {
+                todasLasOrdenes = [];
+                snap.forEach(doc => todasLasOrdenes.push({ id: doc.id, ...doc.data() }));
+                todasLasOrdenes.sort((a,b) => b.timestamp - a.timestamp);
+                renderizarPendientes();
+                filtrarHistorial();
+            });
+        }
+
+        function renderizarPendientes() {
+            const container = document.getElementById('lista-pendientes');
+            const pendientes = todasLasOrdenes.filter(o => o.estado === 'PENDIENTE');
+            document.getElementById('count-pendientes').innerText = pendientes.length;
+            if(pendientes.length === 0) { 
+                container.innerHTML = '<div class="text-center py-24 opacity-30"><i class="fa-solid fa-heart-pulse text-4xl mb-4 block"></i><p class="text-[10px] font-black uppercase">Sin tareas pendientes</p></div>'; 
+                return; 
+            }
+            container.innerHTML = pendientes.map(o => `
+                <div onclick="abrirModal('${o.id}', '${o.correlativo}', '${o.proveedor}')" class="soft-glass card-order p-6 rounded-[2.5rem] active:scale-[0.98] transition-all">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="px-3 py-1 bg-rose-100 text-rose-500 font-black text-[10px] rounded-full uppercase tracking-tighter">${o.correlativo}</span>
+                        <span class="text-[9px] font-bold text-rose-200 uppercase">${o.fecha}</span>
+                    </div>
+                    <div class="text-[14px] font-extrabold text-rose-900 uppercase mb-3">${o.proveedor}</div>
+                    <div class="flex items-center gap-5 text-[9px] text-rose-400 font-bold uppercase">
+                        <span><i class="fa-solid fa-map-location mr-1 text-rose-200"></i>${o.obra}</span>
+                        <span><i class="fa-solid fa-gears mr-1 text-rose-200"></i>${o.maquinaria}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.setFiltroEstado = (estado) => {
+            filtroEstadoActual = estado;
+            ['todas', 'pend', 'reci'].forEach(f => {
+                const btn = document.getElementById(`btn-filtro-${f}`);
+                const isSelected = f === (estado === 'TODAS' ? 'todas' : (estado === 'PENDIENTE' ? 'pend' : 'reci'));
+                btn.classList.toggle('bg-white', isSelected);
+                btn.classList.toggle('text-rose-900', isSelected);
+                btn.classList.toggle('shadow-sm', isSelected);
+                btn.classList.toggle('text-rose-300', !isSelected);
+            });
+            filtrarHistorial();
+        };
+
+        window.limpiarFiltros = () => {
+            document.getElementById('input-busqueda').value = "";
+            document.getElementById('f-nro').value = "";
+            document.getElementById('f-fecha').value = "";
+            document.getElementById('f-proveedor').value = "";
+            document.getElementById('f-emisor').value = "";
+            document.getElementById('f-maquinaria').value = "";
+            document.getElementById('f-obra').value = "";
+            setFiltroEstado('TODAS');
+        };
+
+        window.filtrarHistorial = () => {
+            const queryText = document.getElementById('input-busqueda').value.toLowerCase();
+            const nroText = document.getElementById('f-nro').value.toLowerCase();
+            const fechaVal = document.getElementById('f-fecha').value;
+            const provVal = document.getElementById('f-proveedor').value;
+            const emiVal = document.getElementById('f-emisor').value;
+            const maqVal = document.getElementById('f-maquinaria').value;
+            const obraVal = document.getElementById('f-obra').value;
+            const container = document.getElementById('lista-historial');
+
+            const filtradas = todasLasOrdenes.filter(o => {
+                const matchEstado = (filtroEstadoActual === 'TODAS' || o.estado === filtroEstadoActual);
+                if (!matchEstado) return false;
+                const matchBusqueda = !queryText || o.correlativo.toLowerCase().includes(queryText) || o.proveedor.toLowerCase().includes(queryText) || o.detalle.toLowerCase().includes(queryText);
+                const matchNro = !nroText || o.correlativo.toLowerCase().includes(nroText);
+                let matchFecha = true;
+                if(fechaVal) {
+                    const [y, m, d] = fechaVal.split('-');
+                    matchFecha = o.fecha.includes(`${d}/${m}/${y}`);
+                }
+                const matchProv = !provVal || o.proveedor === provVal;
+                const matchEmi = !emiVal || o.emisor === emiVal;
+                const matchMaq = !maqVal || o.maquinaria === maqVal;
+                const matchObra = !obraVal || o.obra === obraVal;
+                return matchBusqueda && matchNro && matchFecha && matchProv && matchEmi && matchMaq && matchObra;
+            });
+
+            if(filtradas.length === 0) {
+                container.innerHTML = '<div class="text-center py-20 opacity-20"><p class="text-[10px] font-black uppercase tracking-[0.2em]">Sin resultados</p></div>';
+                return;
+            }
+
+            container.innerHTML = filtradas.map(o => `
+                <div class="soft-glass ${o.estado === 'RECIBIDA' ? 'card-received' : 'card-order'} p-5 rounded-[2.5rem]">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex flex-col">
+                            <span class="text-[11px] font-black ${o.estado === 'RECIBIDA' ? 'text-green-600' : 'text-rose-500'}">${o.correlativo}</span>
+                            <span class="text-[9px] font-bold uppercase text-rose-200">${o.estado}</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-rose-200">${o.fecha}</span>
+                    </div>
+                    <div class="text-[13px] font-extrabold uppercase text-rose-900 mb-3">${o.proveedor}</div>
+                    <div class="flex items-center justify-between mt-5">
+                        <div class="flex gap-4 text-[9px] font-bold text-rose-300 uppercase">
+                            <span><i class="fa-solid fa-map-marker-alt mr-1"></i>${o.obra}</span>
+                            <span><i class="fa-solid fa-id-badge mr-1"></i>${o.emisor}</span>
+                        </div>
+                        ${o.url_foto_remito ? `<button onclick="verFoto('${o.url_foto_remito}')" class="bg-rose-50 text-rose-400 px-4 py-2 rounded-2xl text-[9px] font-black uppercase ring-1 ring-rose-100">Ver Remito</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.verFoto = (data) => {
+            document.getElementById('img-ampliada').src = data;
+            document.getElementById('modal-visor').style.display = 'flex';
+        };
+
+        window.procesarFoto = () => {
+            const file = document.getElementById('input-foto').files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    const scale = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scale;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    base64Foto = canvas.toDataURL('image/jpeg', 0.6);
+                    document.getElementById('label-foto').style.borderColor = '#86efac';
+                    document.getElementById('label-foto').style.background = '#f0fdf4';
+                    document.getElementById('foto-status').innerHTML = "Remito listo <i class='fa-solid fa-heart ml-1 text-green-400'></i>";
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.agregarMaestro = async (coll, inputId) => {
+            const val = document.getElementById(inputId).value.trim();
+            if(!val) return;
+            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', coll), { nombre: val.toUpperCase() });
+            document.getElementById(inputId).value = '';
+        };
+
+        document.getElementById('form-oc').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true; btn.innerHTML = '<div class="loader"></div>';
+            const data = {
+                proveedor: document.getElementById('select-proveedor').value,
+                emisor: document.getElementById('select-emisor').value,
+                maquinaria: document.getElementById('select-maquinaria').value,
+                obra: document.getElementById('select-obra').value,
+                moneda: document.getElementById('select-moneda').value,
+                importe: document.getElementById('input-precio').value || "0",
+                iva: document.getElementById('select-iva').value,
+                fecha_entrega: document.getElementById('fecha-entrega').value || "PENDIENTE",
+                detalle: document.getElementById('detalle-oc').value,
+                fecha: document.getElementById('fecha-oc').value,
+                estado: 'PENDIENTE',
+                timestamp: Date.now(),
+                url_foto_remito: ""
+            };
+            try {
+                const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'ordenes'));
+                data.correlativo = `OC-${String(snap.size + 1).padStart(3, '0')}`;
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'ordenes'), data);
+                const msg = `🚛 *NUEVA ORDEN CVC* %0A*Nro:* ${data.correlativo}%0A*Proveedor:* ${data.proveedor}%0A*Obra:* ${data.obra}%0A*Detalle:* ${data.detalle}`;
+                window.open(`https://wa.me/${WHATSAPP_CONTACTO}?text=${msg}`, '_blank');
+                document.getElementById('form-oc').reset();
+            } catch (err) { alert("Error al guardar."); }
+            btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Generar Orden';
+        };
+
+        let currentId, currentNum;
+        window.abrirModal = (id, num, prov) => {
+            currentId = id; currentNum = num;
+            document.getElementById('modal-desc').innerText = `${num} | ${prov}`;
+            document.getElementById('modal-recepcion').classList.remove('hidden');
+            document.getElementById('foto-status').innerText = "Capturar Remito";
+            document.getElementById('label-foto').style.borderColor = '#ffe4e6';
+            document.getElementById('label-foto').style.background = '#fff1f2';
+            base64Foto = "";
+        };
+
+        window.cerrarModal = () => document.getElementById('modal-recepcion').classList.add('hidden');
+
+        window.confirmarRecepcion = async () => {
+            const rec = document.getElementById('input-receptor').value.trim();
+            const btn = document.getElementById('btn-certificar');
+            if(!rec || !base64Foto) { alert("Completá los datos y la foto."); return; }
+            btn.disabled = true; btn.innerHTML = '<div class="loader"></div>';
+            try {
+                const refDoc = doc(db, 'artifacts', appId, 'public', 'data', 'ordenes', currentId);
+                const ahora = new Date().toLocaleString('es-UY');
+                await updateDoc(refDoc, { estado: 'RECIBIDA', receptor: rec, fecha_recepcion: ahora, url_foto_remito: base64Foto });
+                const msg = `✅ *CVC RECIBIDO* %0AOC *#${currentNum}* recibida por *${rec}*.`;
+                cerrarModal();
+                window.open(`https://wa.me/${WHATSAPP_CONTACTO}?text=${encodeURIComponent(msg)}`, '_blank');
+            } catch (e) { alert("Error."); }
+            btn.disabled = false; btn.innerHTML = 'Confirmar';
+        };
+    </script>
+</body>
+</html>
+
