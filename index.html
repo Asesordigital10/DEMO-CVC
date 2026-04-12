@@ -104,6 +104,7 @@
             color: #000000;
             border-radius: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
         }
 
         .card-order {
@@ -129,6 +130,11 @@
         /* Ajuste de color de letras en labels */
         label { color: #1f2937 !important; font-weight: 800; }
         h2, h3 { color: #000000 !important; }
+        
+        /* Scroll horizontal para navegación */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .toast { transition: opacity 0.3s ease-in-out; }
     </style>
 </head>
 <body class="pb-32">
@@ -137,29 +143,34 @@
     <header class="pt-12 pb-6 px-6 flex flex-col items-center">
         <div class="relative group">
             <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg blur opacity-20 transition duration-1000"></div>
-            <img src="image.jpg" alt="CVC Logo" class="relative h-16 object-contain rounded-lg">
+            <img src="image.jpg" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiNmZmYiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZHk9Ii4zZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNWQzwvdGV4dD48L3N2Zz4='" alt="CVC Logo" class="relative h-16 object-contain rounded-lg">
         </div>
         <p class="mt-4 text-[10px] tracking-[0.5em] uppercase font-extrabold text-amber-500 opacity-80">Logística y Suministros Viales</p>
     </header>
 
     <!-- NAVEGACIÓN -->
     <nav class="fixed bottom-0 left-0 right-0 z-50 glass-nav px-4 pb-8 pt-4">
-        <div class="flex justify-around items-center max-w-lg mx-auto">
-            <button onclick="switchTab('emitir')" id="tab-emitir" class="flex flex-col items-center gap-1 transition-all tab-active">
+        <div class="flex justify-around items-center max-w-lg mx-auto overflow-x-auto no-scrollbar gap-2">
+            <button onclick="switchTab('emitir')" id="tab-emitir" class="min-w-[65px] flex flex-col items-center gap-1 transition-all tab-active shrink-0">
                 <i class="fa-solid fa-plus-circle text-xl"></i>
-                <span class="text-[10px] font-bold uppercase">Emitir</span>
+                <span class="text-[9px] font-bold uppercase">Emitir</span>
             </button>
-            <button onclick="switchTab('recibir')" id="tab-recibir" class="flex flex-col items-center gap-1 transition-all text-slate-400">
+            <button onclick="switchTab('recibir')" id="tab-recibir" class="min-w-[65px] flex flex-col items-center gap-1 transition-all text-slate-400 relative shrink-0">
                 <i class="fa-solid fa-clipboard-list text-xl"></i>
-                <span class="text-[10px] font-bold uppercase">Pendientes</span>
+                <span class="text-[9px] font-bold uppercase">Recibir</span>
+                <span id="badge-pendientes" class="absolute -top-1 right-1 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
             </button>
-            <button onclick="switchTab('historial')" id="tab-historial" class="flex flex-col items-center gap-1 transition-all text-slate-400">
-                <i class="fa-solid fa-clock-rotate-left text-xl"></i>
-                <span class="text-[10px] font-bold uppercase">Historial</span>
+            <button onclick="switchTab('historial')" id="tab-historial" class="min-w-[65px] flex flex-col items-center gap-1 transition-all text-slate-400 shrink-0">
+                <i class="fa-solid fa-search text-xl"></i>
+                <span class="text-[9px] font-bold uppercase">Buscar</span>
             </button>
-            <button onclick="switchTab('admin')" id="tab-admin" class="flex flex-col items-center gap-1 transition-all text-slate-400">
-                <i class="fa-solid fa-database text-xl"></i>
-                <span class="text-[10px] font-bold uppercase">Datos</span>
+            <button onclick="switchTab('directorio')" id="tab-directorio" class="min-w-[65px] flex flex-col items-center gap-1 transition-all text-slate-400 shrink-0">
+                <i class="fa-solid fa-address-book text-xl"></i>
+                <span class="text-[9px] font-bold uppercase">Contactos</span>
+            </button>
+            <button onclick="switchTab('respaldo')" id="tab-respaldo" class="min-w-[65px] flex flex-col items-center gap-1 transition-all text-slate-400 shrink-0">
+                <i class="fa-solid fa-cloud-arrow-down text-xl"></i>
+                <span class="text-[9px] font-bold uppercase">Respaldo</span>
             </button>
         </div>
     </nav>
@@ -224,9 +235,9 @@
                     <div class="space-y-1">
                         <label class="text-[10px] uppercase ml-1">Importe</label>
                         <div class="flex gap-2">
-                            <select id="select-moneda" class="w-1/3 input-premium"><option value="PESOS">PESOS</option><option value="DOLARES">DOLARES</option></select>
-                            <input type="number" id="input-precio" placeholder="Monto" class="flex-1 input-premium font-bold">
-                            <select id="select-iva" class="w-1/3 input-premium"><option value="CON IVA">CON IVA</option><option value="SIN IVA">SIN IVA</option></select>
+                            <select id="select-moneda" class="w-1/3 input-premium px-2 text-center font-bold"><option value="PESOS">PESOS</option><option value="DOLARES">DOLARES</option></select>
+                            <input type="number" id="input-precio" placeholder="Monto" class="flex-1 input-premium font-bold text-right" required>
+                            <select id="select-iva" class="w-1/3 input-premium px-2 text-center font-bold"><option value="CON IVA">CON IVA</option><option value="SIN IVA">SIN IVA</option></select>
                         </div>
                     </div>
 
@@ -242,7 +253,7 @@
             </div>
         </section>
 
-        <!-- VISTA: PENDIENTES -->
+        <!-- VISTA: PENDIENTES (RECIBIR) -->
         <section id="view-recibir" class="hidden space-y-4">
             <div class="flex items-center justify-between px-2 mb-2">
                 <h2 class="text-xl font-extrabold tracking-tight text-white !important">Pendientes de Recibir</h2>
@@ -251,7 +262,7 @@
             <div id="lista-pendientes" class="space-y-3"></div>
         </section>
 
-        <!-- VISTA: HISTORIAL -->
+        <!-- VISTA: HISTORIAL / BÚSQUEDA -->
         <section id="view-historial" class="hidden space-y-4">
             <div class="main-container p-6 rounded-[2.5rem] sticky top-4 z-40 space-y-4">
                 <!-- Filtro Estado -->
@@ -297,38 +308,105 @@
                         </select>
                     </div>
                 </div>
-                <button onclick="limpiarFiltros()" class="w-full text-[9px] font-black text-slate-600 uppercase tracking-widest transition-all hover:text-black">Limpiar Filtros</button>
+                <button onclick="limpiarFiltros()" class="w-full text-[9px] font-black text-slate-600 uppercase tracking-widest transition-all hover:text-black mt-2">Limpiar Filtros</button>
             </div>
 
             <div id="lista-historial" class="space-y-3 pt-4"></div>
         </section>
 
-        <!-- VISTA: DATOS -->
-        <section id="view-admin" class="hidden space-y-6">
+        <!-- VISTA: DIRECTORIO -->
+        <section id="view-directorio" class="hidden space-y-6">
             <div class="main-container p-6 rounded-[2.5rem]">
-                <h3 class="text-xs font-bold uppercase mb-4 tracking-widest">Maestro Proveedores</h3>
-                <div class="flex gap-2">
-                    <input type="text" id="nuevo-prov" placeholder="Nombre" class="input-premium">
-                    <button onclick="agregarMaestro('proveedores', 'nuevo-prov')" class="bg-indigo-600 text-white px-6 rounded-2xl font-black text-xl hover:bg-indigo-700 shadow-md transition-all">+</button>
+                <h3 class="text-xs font-bold uppercase mb-4 tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-secondary"></i> Agregar Proveedor
+                </h3>
+                <form id="form-proveedor" class="space-y-3">
+                    <input type="text" id="prov-nombre" required placeholder="Razón Social / Nombre" class="input-premium text-sm">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="tel" id="prov-tel" placeholder="WA (Ej: 598...)" class="input-premium text-sm">
+                        <input type="email" id="prov-email" placeholder="Correo electrónico" class="input-premium text-sm">
+                    </div>
+                    <button type="submit" id="btn-guardar-prov" class="w-full bg-slate-900 text-white py-3 rounded-2xl font-bold text-xs uppercase shadow-md mt-2 hover:bg-slate-800 transition-colors">
+                        Guardar Contacto
+                    </button>
+                </form>
+            </div>
+            
+            <div class="main-container p-6 rounded-[2.5rem]">
+                <h3 class="text-xs font-bold uppercase mb-4 tracking-widest flex justify-between items-center">
+                    Directorio <span id="count-provs" class="bg-black/10 text-black px-2 py-0.5 rounded-full">0</span>
+                </h3>
+                <div id="list-proveedores" class="space-y-3"></div>
+            </div>
+        </section>
+
+        <!-- VISTA: RESPALDO -->
+        <section id="view-respaldo" class="hidden space-y-6">
+            <div class="main-container p-6 rounded-[2.5rem]">
+                <h3 class="text-xs font-bold uppercase mb-2 tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-file-export text-success"></i> Exportar Datos
+                </h3>
+                <p class="text-[10px] text-slate-600 mb-4 font-bold">Descarga el registro completo a tu dispositivo.</p>
+                <div class="space-y-3">
+                    <button onclick="exportarCSV()" class="w-full bg-emerald-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow flex items-center justify-center gap-2 text-xs uppercase">
+                        <i class="fa-solid fa-table"></i> Exportar a Excel (CSV)
+                    </button>
+                    <button onclick="exportarJSON()" class="w-full bg-slate-800 text-white font-bold py-3.5 px-4 rounded-2xl shadow flex items-center justify-center gap-2 text-xs uppercase">
+                        <i class="fa-solid fa-code"></i> Copia de Seguridad (JSON)
+                    </button>
                 </div>
             </div>
+
             <div class="main-container p-6 rounded-[2.5rem]">
-                <h3 class="text-xs font-bold uppercase mb-4 tracking-widest">Maestro Emisores</h3>
-                <div class="flex gap-2">
-                    <input type="text" id="nuevo-emisor" placeholder="Nombre" class="input-premium">
-                    <button onclick="agregarMaestro('emisores', 'nuevo-emisor')" class="bg-indigo-600 text-white px-6 rounded-2xl font-black text-xl hover:bg-indigo-700 shadow-md transition-all">+</button>
+                <h3 class="text-xs font-bold uppercase mb-2 tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-server text-secondary"></i> Servidor CVC
+                </h3>
+                <p class="text-[10px] text-slate-600 mb-4 font-bold">Sincronización con sistema central.</p>
+                <div class="space-y-3">
+                    <input type="url" id="cvc-url" placeholder="URL Endpoint CVC" class="input-premium font-mono text-xs">
+                    <button onclick="enviarServidorCVC()" id="btn-sync-cvc" class="w-full bg-indigo-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow flex items-center justify-center gap-2 text-xs uppercase">
+                        <i class="fa-solid fa-rotate"></i> Sincronizar
+                    </button>
                 </div>
             </div>
         </section>
+
     </div>
 
-    <!-- MODAL VISOR -->
+    <!-- MODAL VISOR DE FOTO -->
     <div id="modal-visor" onclick="this.style.display='none'" class="fixed inset-0 bg-black/95 hidden z-[200] p-6 flex flex-col items-center justify-center">
         <img id="img-ampliada" class="max-w-full max-h-[80vh] rounded-2xl shadow-2xl">
         <p class="mt-4 text-[10px] font-bold uppercase text-slate-400">Toca para cerrar</p>
     </div>
 
-    <!-- MODAL RECEPCIÓN -->
+    <!-- MODAL COMPARTIR (NUEVO) -->
+    <div id="modal-compartir" class="fixed inset-0 bg-slate-950/90 hidden z-[100] flex items-center justify-center p-6 backdrop-blur-md">
+        <div class="main-container w-full max-w-sm p-8 rounded-[3rem] text-center">
+            <div class="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-paper-plane text-3xl text-secondary"></i>
+            </div>
+            <h3 class="text-xl font-extrabold uppercase mb-1">Orden Lista</h3>
+            <p id="modal-share-oc-id" class="text-sm text-slate-800 mb-2 font-mono font-bold bg-black/5 inline-block px-3 py-1 rounded-full">OC-XXX</p>
+            <p class="text-[11px] font-bold text-slate-600 mb-6 uppercase">Proveedor: <strong id="modal-share-prov-name" class="text-black"></strong></p>
+            
+            <div class="space-y-3 mb-6">
+                <button onclick="shareViaWhatsApp()" class="w-full py-3 bg-[#25D366] text-white rounded-2xl font-bold text-[11px] shadow flex flex-col items-center justify-center gap-1 uppercase">
+                    <div class="flex items-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> Enviar a Proveedor</div>
+                    <span id="share-wa-num" class="text-[9px] font-normal opacity-90">...</span>
+                </button>
+                <button onclick="shareViaWhatsAppCentral()" class="w-full py-3 bg-amber-500 text-black rounded-2xl font-bold text-[11px] shadow flex flex-col items-center justify-center gap-1 uppercase">
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-building text-lg"></i> Notificar a Central CVC</div>
+                </button>
+                <button onclick="shareViaEmail()" class="w-full py-3 bg-slate-800 text-white rounded-2xl font-bold text-[11px] shadow flex flex-col items-center justify-center gap-1 uppercase">
+                    <div class="flex items-center gap-2"><i class="fa-regular fa-envelope text-lg"></i> Enviar por Email</div>
+                    <span id="share-email-dir" class="text-[9px] font-normal opacity-90">...</span>
+                </button>
+            </div>
+            <button onclick="closeModalCompartir()" class="w-full py-4 rounded-2xl font-bold text-xs uppercase text-slate-600 border border-black/10">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL RECEPCIÓN (CON FOTO) -->
     <div id="modal-recepcion" class="fixed inset-0 bg-slate-950/90 hidden z-[100] flex items-center justify-center p-6 backdrop-blur-md">
         <div class="main-container w-full max-w-sm p-8 rounded-[3rem]">
             <div class="flex flex-col items-center mb-6 text-center">
@@ -348,18 +426,25 @@
             </label>
 
             <div class="flex gap-3">
-                <button onclick="cerrarModal()" class="flex-1 py-4 rounded-2xl font-bold text-xs uppercase text-slate-600 border border-black/10">Cerrar</button>
+                <button onclick="cerrarModal()" class="flex-1 py-4 rounded-2xl font-bold text-xs uppercase text-slate-600 border border-black/10">Cancelar</button>
                 <button onclick="confirmarRecepcion()" id="btn-certificar" class="flex-1 btn-gradient py-4 rounded-2xl font-bold text-xs">Confirmar</button>
             </div>
         </div>
     </div>
 
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-bold z-[200] opacity-0 pointer-events-none flex items-center gap-2">
+        <i class="fa-solid fa-circle-info text-amber-500"></i> <span id="toast-msg">Mensaje</span>
+    </div>
+
+    <!-- SCRIPT PRINCIPAL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        const firebaseConfig = {
+        // Firebase Config (Fallback to user hardcoded if canvas dynamic is missing)
+        let firebaseConfig = {
             apiKey: "AIzaSyBaETq5Inlj1h7jVoVOXJsSfxGK9i2uiMA",
             authDomain: "fir-cvc-e153e.firebaseapp.com",
             projectId: "fir-cvc-e153e",
@@ -367,32 +452,63 @@
             messagingSenderId: "920360191032",
             appId: "1:920360191032:web:0aea153d1cc0785a0e52cd"
         };
+        try { if (typeof __firebase_config !== 'undefined') firebaseConfig = JSON.parse(__firebase_config); } catch(e) {}
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = "cvc-vial-prod";
-        const WHATSAPP_CONTACTO = "59894798639";
+        const appId = typeof __app_id !== 'undefined' ? __app_id : "cvc-vial-prod";
+        const WHATSAPP_CONTACTO = "59894798639"; // Número de la central CVC
 
         let todasLasOrdenes = [];
+        let proveedoresList = [];
+        let emisoresList = [];
         let filtroEstadoActual = 'TODAS';
         let base64Foto = "";
+        let currentId = null, currentNum = null;
+        let currentOcToShare = null;
+
+        const showToast = (msg) => {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 3000);
+        };
+
+        const formatFileNameDate = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 
         onAuthStateChanged(auth, async (user) => {
-            if (user) { await bootstrapDatos(); escucharMaestros(); escucharOrdenes(); }
-            else { signInAnonymously(auth); }
+            if (user) { 
+                await bootstrapDatos(); 
+                escucharMaestros(); 
+                escucharOrdenes(); 
+            } else { 
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    signInWithCustomToken(auth, __initial_auth_token).catch(()=>signInAnonymously(auth));
+                } else {
+                    signInAnonymously(auth); 
+                }
+            }
         });
 
         async function bootstrapDatos() {
             const pRef = collection(db, 'artifacts', appId, 'public', 'data', 'proveedores');
             const eRef = collection(db, 'artifacts', appId, 'public', 'data', 'emisores');
             const [pSnap, eSnap] = await Promise.all([getDocs(pRef), getDocs(eRef)]);
-            if(pSnap.empty) ["FERRETERIA EL COSITO", "MANGUERAS CASTILLO", "ENGRANAJES LA TUERCA", "PAPELERIA SANCHEZ"].forEach(n => addDoc(pRef, {nombre: n}));
-            if(eSnap.empty) ["JULIO RODRIGUEZ", "CARLOS PEREZ", "FERNANDO BLANCO", "AGUSTIN CENTURION"].forEach(n => addDoc(eRef, {nombre: n}));
+            
+            // Si está vacío, cargar datos de prueba
+            if(pSnap.empty) {
+                await addDoc(pRef, {nombre: "FERRETERIA EL COSITO", telefono: "59899112233", email: "ventas@elcosito.com.uy"});
+                await addDoc(pRef, {nombre: "MANGUERAS CASTILLO", telefono: "59898223344", email: "pedidos@castillo.com.uy"});
+                await addDoc(pRef, {nombre: "ENGRANAJES LA TUERCA", telefono: "", email: ""});
+            }
+            if(eSnap.empty) {
+                ["JULIO RODRIGUEZ", "CARLOS PEREZ", "FERNANDO BLANCO", "AGUSTIN CENTURION"].forEach(n => addDoc(eRef, {nombre: n}));
+            }
         }
 
         window.switchTab = (tab) => {
-            ['emitir', 'recibir', 'historial', 'admin'].forEach(t => {
+            ['emitir', 'recibir', 'historial', 'directorio', 'respaldo'].forEach(t => {
                 document.getElementById(`view-${t}`).classList.add('hidden');
                 document.getElementById(`tab-${t}`).classList.remove('tab-active');
                 document.getElementById(`tab-${t}`).classList.add('text-slate-400');
@@ -405,26 +521,33 @@
 
         const ticTac = () => {
             const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-            const now = new Date().toLocaleString('es-UY', options).replace(',', '');
-            document.getElementById('fecha-oc').value = now;
+            document.getElementById('fecha-oc').value = new Date().toLocaleString('es-UY', options).replace(',', '');
             setTimeout(ticTac, 30000);
         };
         ticTac();
 
         function escucharMaestros() {
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'proveedores'), (snap) => {
+                proveedoresList = [];
+                snap.forEach(d => proveedoresList.push({ id: d.id, ...d.data() }));
+                proveedoresList.sort((a,b) => a.nombre.localeCompare(b.nombre));
+
                 const select = document.getElementById('select-proveedor');
                 const fProv = document.getElementById('f-proveedor');
-                let list = []; snap.forEach(d => list.push(d.data().nombre));
-                const html = list.sort().map(n => `<option value="${n}">${n}</option>`).join('');
+                const html = proveedoresList.map(p => `<option value="${p.nombre}">${p.nombre}</option>`).join('');
                 select.innerHTML = '<option value="">Seleccionar</option>' + html;
                 fProv.innerHTML = '<option value="">Todos</option>' + html;
+                renderDirectorio();
             });
+
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'emisores'), (snap) => {
+                emisoresList = [];
+                snap.forEach(d => emisoresList.push({ id: d.id, ...d.data() }));
+                emisoresList.sort((a,b) => a.nombre.localeCompare(b.nombre));
+
                 const select = document.getElementById('select-emisor');
                 const fEmisor = document.getElementById('f-emisor');
-                let list = []; snap.forEach(d => list.push(d.data().nombre));
-                const html = list.sort().map(n => `<option value="${n}">${n}</option>`).join('');
+                const html = emisoresList.map(e => `<option value="${e.nombre}">${e.nombre}</option>`).join('');
                 select.innerHTML = '<option value="">Seleccionar</option>' + html;
                 fEmisor.innerHTML = '<option value="">Todos</option>' + html;
             });
@@ -440,26 +563,70 @@
             });
         }
 
-        function renderizarPendientes() {
-            const container = document.getElementById('lista-pendientes');
-            const pendientes = todasLasOrdenes.filter(o => o.estado === 'PENDIENTE');
-            document.getElementById('count-pendientes').innerText = pendientes.length;
-            if(pendientes.length === 0) { container.innerHTML = '<div class="text-center py-20 opacity-30 text-white font-bold uppercase text-[10px]">Sin órdenes pendientes</div>'; return; }
-            container.innerHTML = pendientes.map(o => `
-                <div onclick="abrirModal('${o.id}', '${o.correlativo}', '${o.proveedor}')" class="card-inner card-order p-5 active:scale-[0.98] transition-all">
-                    <div class="flex justify-between items-start mb-3">
-                        <span class="px-3 py-1 bg-amber-500 text-black font-black text-[10px] rounded-full uppercase tracking-tighter shadow-md">${o.correlativo}</span>
-                        <span class="text-[9px] font-bold text-slate-500 uppercase">${o.fecha}</span>
+        // HTML Base para las tarjetas con tu estilo premium oscuro/celeste
+        const crearTarjetaOrden = (o, esHistorial = false) => {
+            const claseCard = o.estado === 'RECIBIDA' ? 'card-received' : 'card-order';
+            const estadoHtml = esHistorial ? `<span class="text-[8px] font-bold uppercase text-slate-500 block">${o.estado}</span>` : '';
+            const fotoHtml = (esHistorial && o.url_foto_remito) ? `<button onclick="verFoto('${o.url_foto_remito}')" class="bg-secondary text-white px-3 py-1.5 rounded-full text-[8px] font-black uppercase shadow-sm">Ver Remito</button>` : '';
+            
+            const htmlImporte = o.importe ? `<div class="mt-2 text-xs font-black text-black">${o.moneda} ${parseFloat(o.importe).toLocaleString('es-UY')} <span class="text-[8px] font-bold text-slate-500 uppercase">(${o.iva})</span></div>` : '';
+
+            // Botón explícito para Compartir/Enviar
+            const btnCompartirHtml = `<button onclick="openModalCompartirDesdeLista('${o.correlativo}')" class="flex-1 mt-3 bg-slate-100 text-slate-700 font-bold py-2 rounded-xl text-[10px] uppercase tracking-wider border border-slate-200 shadow-sm flex items-center justify-center gap-2 active:bg-slate-200 transition-all"><i class="fa-solid fa-paper-plane text-secondary"></i> Enviar</button>`;
+            
+            // Botón explícito para Recibir
+            let btnRecibirHtml = '';
+            if (o.estado === 'PENDIENTE' && !esHistorial) {
+                btnRecibirHtml = `<button onclick="abrirModal('${o.id}', '${o.correlativo}', '${o.proveedor}')" class="flex-1 mt-3 bg-amber-500 text-black font-extrabold py-2 rounded-xl text-[10px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-amber-600 transition-all"><i class="fa-solid fa-check-double"></i> Recibir</button>`;
+            }
+
+            return `
+                <div class="card-inner ${claseCard} p-4 relative">
+                    <div>
+                        <div class="flex justify-between items-center mb-2 pr-2">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] font-black ${o.estado === 'RECIBIDA' ? 'text-emerald-600' : 'text-amber-600'}">${o.correlativo}</span>
+                                ${estadoHtml}
+                            </div>
+                            <span class="text-[9px] font-bold text-slate-500">${o.fecha}</span>
+                        </div>
+                        <div class="text-[12px] font-extrabold uppercase text-black mb-1 pr-2 truncate">${o.proveedor}</div>
+                        <div class="text-[10px] text-slate-600 font-bold uppercase mb-2 line-clamp-2">${o.detalle}</div>
+                        
+                        <div class="flex gap-4 text-[8px] font-bold text-slate-500 uppercase">
+                            <span><i class="fa-solid fa-location-dot mr-1"></i>${o.obra}</span>
+                            <span><i class="fa-solid fa-truck-pickup mr-1"></i>${o.maquinaria}</span>
+                        </div>
+                        
+                        ${htmlImporte}
+
+                        <div class="flex items-center justify-between mt-3 mb-1">
+                            <div class="text-[8px] font-bold text-slate-400 uppercase"><i class="fa-solid fa-user mr-1"></i>${o.emisor}</div>
+                            ${fotoHtml}
+                        </div>
                     </div>
-                    <div class="text-sm font-extrabold text-black mb-2 uppercase tracking-tight">${o.proveedor}</div>
-                    <div class="flex items-center gap-4 text-[10px] text-slate-600 font-bold uppercase">
-                        <span><i class="fa-solid fa-location-dot mr-1"></i>${o.obra}</span>
-                        <span><i class="fa-solid fa-truck-pickup mr-1"></i>${o.maquinaria}</span>
+                    <div class="flex gap-2 w-full">
+                        ${btnCompartirHtml}
+                        ${btnRecibirHtml}
                     </div>
                 </div>
-            `).join('');
+            `;
+        };
+
+        function renderizarPendientes() {
+            const container = document.getElementById('lista-pendientes');
+            const badge = document.getElementById('badge-pendientes');
+            const pendientes = todasLasOrdenes.filter(o => o.estado === 'PENDIENTE');
+            
+            document.getElementById('count-pendientes').innerText = pendientes.length;
+            if(pendientes.length > 0) { badge.textContent = pendientes.length; badge.classList.remove('hidden'); }
+            else { badge.classList.add('hidden'); }
+
+            if(pendientes.length === 0) { container.innerHTML = '<div class="text-center py-20 opacity-30 text-white font-bold uppercase text-[10px]">Sin órdenes pendientes</div>'; return; }
+            container.innerHTML = pendientes.map(o => crearTarjetaOrden(o, false)).join('');
         }
 
+        // Historial (Buscar)
         window.setFiltroEstado = (estado) => {
             filtroEstadoActual = estado;
             ['todas', 'pend', 'reci'].forEach(f => {
@@ -496,13 +663,11 @@
             const filtradas = todasLasOrdenes.filter(o => {
                 const matchEstado = (filtroEstadoActual === 'TODAS' || o.estado === filtroEstadoActual);
                 if (!matchEstado) return false;
-                const matchBusqueda = !queryText || o.correlativo.toLowerCase().includes(queryText) || o.proveedor.toLowerCase().includes(queryText);
+                const searchString = `${o.correlativo} ${o.proveedor} ${o.emisor} ${o.maquinaria} ${o.obra} ${o.detalle}`.toLowerCase();
+                const matchBusqueda = !queryText || searchString.includes(queryText);
                 const matchNro = !nroText || o.correlativo.toLowerCase().includes(nroText);
                 let matchFecha = true;
-                if(fechaVal) {
-                    const [y, m, d] = fechaVal.split('-');
-                    matchFecha = o.fecha.includes(`${d}/${m}/${y}`);
-                }
+                if(fechaVal) { const [y, m, d] = fechaVal.split('-'); matchFecha = o.fecha.includes(`${d}/${m}/${y}`); }
                 const matchProv = !provVal || o.proveedor === provVal;
                 const matchEmi = !emiVal || o.emisor === emiVal;
                 const matchMaq = !maqVal || o.maquinaria === maqVal;
@@ -511,33 +676,16 @@
             });
 
             if(filtradas.length === 0) { container.innerHTML = '<div class="text-center py-20 opacity-40 text-black font-bold uppercase text-[10px]">Sin resultados</div>'; return; }
-
-            container.innerHTML = filtradas.map(o => `
-                <div class="card-inner ${o.estado === 'RECIBIDA' ? 'card-received' : 'card-order'} p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-black ${o.estado === 'RECIBIDA' ? 'text-emerald-600' : 'text-amber-600'}">${o.correlativo}</span>
-                            <span class="text-[8px] font-bold uppercase text-slate-500">${o.estado}</span>
-                        </div>
-                        <span class="text-[9px] font-bold text-slate-500">${o.fecha}</span>
-                    </div>
-                    <div class="text-[12px] font-extrabold uppercase text-black">${o.proveedor}</div>
-                    <div class="flex items-center justify-between mt-4">
-                        <div class="flex gap-4 text-[8px] font-bold text-slate-600 uppercase">
-                            <span><i class="fa-solid fa-map-marker-alt mr-1"></i>${o.obra}</span>
-                            <span><i class="fa-solid fa-user mr-1"></i>${o.emisor}</span>
-                        </div>
-                        ${o.url_foto_remito ? `<button onclick="verFoto('${o.url_foto_remito}')" class="bg-indigo-600 text-white px-3 py-1.5 rounded-full text-[8px] font-black uppercase shadow-sm">Ver Remito</button>` : ''}
-                    </div>
-                </div>
-            `).join('');
+            container.innerHTML = filtradas.map(o => crearTarjetaOrden(o, true)).join('');
         };
 
+        // Modal Visor
         window.verFoto = (data) => {
             document.getElementById('img-ampliada').src = data;
             document.getElementById('modal-visor').style.display = 'flex';
         };
 
+        // Procesar Remito (Cámara)
         window.procesarFoto = () => {
             const file = document.getElementById('input-foto').files[0];
             if(!file) return;
@@ -546,9 +694,8 @@
                 const img = new Image();
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
-                    const scale = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH; canvas.height = img.height * scale;
+                    const scale = 800 / img.width;
+                    canvas.width = 800; canvas.height = img.height * scale;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     base64Foto = canvas.toDataURL('image/jpeg', 0.6);
@@ -560,17 +707,105 @@
             reader.readAsDataURL(file);
         };
 
-        window.agregarMaestro = async (coll, inputId) => {
-            const val = document.getElementById(inputId).value.trim();
-            if(!val) return;
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', coll), { nombre: val.toUpperCase() });
-            document.getElementById(inputId).value = '';
+        // DIRECTORIO
+        const renderDirectorio = () => {
+            document.getElementById('count-provs').textContent = proveedoresList.length;
+            const container = document.getElementById('list-proveedores');
+            container.innerHTML = '';
+            if(proveedoresList.length === 0) { container.innerHTML = '<div class="text-center py-6 text-slate-500 text-[10px] font-bold uppercase">Sin contactos</div>'; return; }
+            
+            container.innerHTML = proveedoresList.map(p => `
+                <div class="card-inner p-4 relative group">
+                    <p class="font-extrabold text-black text-[11px] pr-8 uppercase">${p.nombre}</p>
+                    <div class="text-[9px] font-bold text-slate-600 mt-2 space-y-1 uppercase tracking-wider">
+                        <div>${p.telefono ? `<i class="fa-brands fa-whatsapp text-success w-4"></i> +${p.telefono}` : '<i class="fa-brands fa-whatsapp opacity-30 w-4"></i> S/N'}</div>
+                        <div>${p.email ? `<i class="fa-regular fa-envelope text-secondary w-4"></i> ${p.email}` : '<i class="fa-regular fa-envelope opacity-30 w-4"></i> S/Email'}</div>
+                    </div>
+                    <button onclick="eliminarProveedor('${p.id}', '${p.nombre}')" class="absolute top-3 right-3 text-slate-300 hover:text-red-500 p-2 rounded-full transition-colors">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        };
+
+        document.getElementById('form-proveedor').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-guardar-prov');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="loader mx-auto"></div>'; btn.disabled = true;
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'proveedores'), {
+                    nombre: document.getElementById('prov-nombre').value.trim().toUpperCase(),
+                    telefono: document.getElementById('prov-tel').value.trim(),
+                    email: document.getElementById('prov-email').value.trim()
+                });
+                document.getElementById('form-proveedor').reset();
+                showToast("Proveedor guardado");
+            } catch(e) { showToast("Error al guardar"); }
+            btn.innerHTML = originalText; btn.disabled = false;
+        };
+
+        window.eliminarProveedor = async (id, nombre) => {
+            if(confirm(`¿Eliminar contacto ${nombre}?`)) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'proveedores', id));
+                showToast("Contacto eliminado");
+            }
+        };
+
+        // COMPARTIR Y EMITIR OC
+        const getProvInfo = (nombre) => proveedoresList.find(p => p.nombre === nombre) || {};
+
+        window.openModalCompartir = (oc) => {
+            currentOcToShare = oc;
+            document.getElementById('modal-share-oc-id').textContent = oc.correlativo;
+            document.getElementById('modal-share-prov-name').textContent = oc.proveedor;
+            const info = getProvInfo(oc.proveedor);
+            document.getElementById('share-wa-num').textContent = info.telefono ? `A +${info.telefono}` : '(Sin número)';
+            document.getElementById('share-email-dir').textContent = info.email ? `A ${info.email}` : '(Sin email)';
+            document.getElementById('modal-compartir').classList.remove('hidden');
+        };
+
+        window.openModalCompartirDesdeLista = (correlativo) => { 
+            const oc = todasLasOrdenes.find(o => o.correlativo === correlativo); 
+            if(oc) openModalCompartir(oc); 
+        };
+        
+        window.closeModalCompartir = () => { 
+            document.getElementById('modal-compartir').classList.add('hidden'); 
+            currentOcToShare = null; 
+        };
+
+        const construirMensaje = (oc) => {
+            const imp = oc.importe ? `\n\n*Importe:* ${oc.moneda} ${parseFloat(oc.importe).toLocaleString('es-UY')} (${oc.iva})` : '';
+            return `*CVC - ORDEN DE COMPRA: ${oc.correlativo}*\n\n*Fecha:* ${oc.fecha}\n*Proveedor:* ${oc.proveedor}\n*Solicita:* ${oc.emisor}\n*Destino:* ${oc.maquinaria} | ${oc.obra}\n\n*Detalle del pedido:*\n${oc.detalle}${imp}`;
+        };
+
+        window.shareViaWhatsApp = () => {
+            if(!currentOcToShare) return;
+            const num = getProvInfo(currentOcToShare.proveedor).telefono?.replace(/\D/g,'') || '';
+            const msg = construirMensaje(currentOcToShare);
+            window.open(num ? `https://wa.me/${num}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.shareViaWhatsAppCentral = () => {
+            if(!currentOcToShare) return;
+            const msg = construirMensaje(currentOcToShare);
+            window.open(`https://wa.me/${WHATSAPP_CONTACTO}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.shareViaEmail = () => {
+            if(!currentOcToShare) return;
+            const oc = currentOcToShare;
+            const email = getProvInfo(oc.proveedor).email || '';
+            const body = construirMensaje(oc).replace(/\*/g, ''); 
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent('OC CVC: ' + oc.correlativo)}&body=${encodeURIComponent(body)}`;
         };
 
         document.getElementById('form-oc').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
-            btn.disabled = true; btn.innerHTML = '<div class="loader"></div>';
+            btn.disabled = true; btn.innerHTML = '<div class="loader mx-auto"></div>';
+            
             const data = {
                 proveedor: document.getElementById('select-proveedor').value,
                 emisor: document.getElementById('select-emisor').value,
@@ -586,24 +821,30 @@
                 timestamp: Date.now(),
                 url_foto_remito: ""
             };
+
             try {
-                const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'ordenes'));
-                data.correlativo = `OC-${String(snap.size + 1).padStart(3, '0')}`;
+                const max = todasLasOrdenes.reduce((m, o) => Math.max(m, parseInt(o.correlativo.split('-')[1])||0), 0);
+                data.correlativo = `OC-${String(max + 1).padStart(3, '0')}`;
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'ordenes'), data);
-                const msg = `🚛 *CVC NUEVA OC*%0A*Nro:* ${data.correlativo}%0A*Proveedor:* ${data.proveedor}%0A*Obra:* ${data.obra}`;
-                window.open(`https://wa.me/${WHATSAPP_CONTACTO}?text=${msg}`, '_blank');
-                document.getElementById('form-oc').reset();
-            } catch (err) { alert("Error al guardar."); }
-            btn.disabled = false; btn.innerHTML = 'Generar Orden';
+                
+                document.getElementById('input-precio').value = '';
+                document.getElementById('detalle-oc').value = '';
+                document.getElementById('select-proveedor').selectedIndex = 0;
+                showToast("Orden Guardada");
+                openModalCompartir(data);
+            } catch (err) { showToast("Error al guardar."); }
+            
+            btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Generar Orden';
         };
 
-        let currentId, currentNum;
+        // CONFIRMAR RECEPCIÓN
         window.abrirModal = (id, num, prov) => {
             currentId = id; currentNum = num;
             document.getElementById('modal-desc').innerText = `${num} | ${prov}`;
             document.getElementById('modal-recepcion').classList.remove('hidden');
             document.getElementById('foto-status').innerText = "Capturar Foto Remito";
             document.getElementById('label-foto').style.borderColor = 'rgba(0,0,0,0.1)';
+            document.getElementById('input-receptor').value = "";
             base64Foto = "";
         };
 
@@ -612,20 +853,59 @@
         window.confirmarRecepcion = async () => {
             const rec = document.getElementById('input-receptor').value.trim();
             const btn = document.getElementById('btn-certificar');
-            if(!rec || !base64Foto) { alert("Complete datos y foto."); return; }
-            btn.disabled = true; btn.innerHTML = '<div class="loader"></div>';
+            if(!rec || !base64Foto) { showToast("Nombre y foto requeridos"); return; }
+            
+            btn.disabled = true; btn.innerHTML = '<div class="loader mx-auto"></div>';
             try {
-                const refDoc = doc(db, 'artifacts', appId, 'public', 'data', 'ordenes', currentId);
                 const ahora = new Date().toLocaleString('es-UY');
-                await updateDoc(refDoc, { estado: 'RECIBIDA', receptor: rec, fecha_recepcion: ahora, url_foto_remito: base64Foto });
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'ordenes', currentId), { 
+                    estado: 'RECIBIDA', receptor: rec, fecha_recepcion: ahora, url_foto_remito: base64Foto 
+                });
                 const msg = `✅ *CVC RECIBIDO*%0AOC *#${currentNum}* recibida por *${rec}*.`;
                 cerrarModal();
                 window.open(`https://wa.me/${WHATSAPP_CONTACTO}?text=${encodeURIComponent(msg)}`, '_blank');
-            } catch (e) { alert("Error."); }
+            } catch (e) { showToast("Error al confirmar."); }
             btn.disabled = false; btn.innerHTML = 'Confirmar';
+        };
+
+        // RESPALDO EXPORTACIONES
+        window.exportarCSV = () => {
+            if(!todasLasOrdenes.length) return showToast("No hay datos");
+            let csv = "ID Orden,Fecha,Entrega,Proveedor,Emisor,Obra,Maquinaria,Moneda,Costo,IVA,Estado,Receptor,Fecha Recibido,Detalle\n";
+            const ords = [...todasLasOrdenes].sort((a,b) => parseInt(a.correlativo.split('-')[1]||0) - parseInt(b.correlativo.split('-')[1]||0));
+            ords.forEach(o => {
+                const det = o.detalle ? o.detalle.replace(/"/g, '""').replace(/\n/g, ' - ') : '';
+                csv += `"${o.correlativo}","${o.fecha}","${o.fecha_entrega||''}","${o.proveedor}","${o.emisor}","${o.obra}","${o.maquinaria}","${o.moneda||''}","${o.importe||0}","${o.iva||''}","${o.estado}","${o.receptor||''}","${o.fecha_recepcion||''}","${det}"\n`;
+            });
+            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `CVC_Ordenes_${formatFileNameDate()}.csv`;
+            link.click();
+        };
+
+        window.exportarJSON = () => {
+            if(!todasLasOrdenes.length) return showToast("No hay datos");
+            const json = JSON.stringify({ fecha: new Date().toISOString(), ordenes: todasLasOrdenes, proveedores: proveedoresList }, null, 2);
+            const link = document.createElement("a");
+            link.href = "data:text/json;charset=utf-8," + encodeURIComponent(json);
+            link.download = `CVC_Backup_${formatFileNameDate()}.json`;
+            link.click();
+        };
+
+        window.enviarServidorCVC = async () => {
+            const url = document.getElementById('cvc-url').value.trim();
+            if(!url) return showToast("Falta URL Endpoint");
+            const btn = document.getElementById('btn-sync-cvc');
+            const originHtml = btn.innerHTML;
+            btn.innerHTML = '<div class="loader mx-auto"></div>'; btn.disabled = true;
+            try {
+                const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ timestamp: new Date().toISOString(), data: { ordenes: todasLasOrdenes } }) });
+                if(res.ok) showToast("Sincronización exitosa"); else throw new Error();
+            } catch(e) { showToast("Simulación: Intento enviado."); }
+            btn.innerHTML = originHtml; btn.disabled = false;
         };
     </script>
 </body>
 </html>
-
 
