@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CVC Vial Premium Contrast</title>
     
-    <!-- Configuración PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#020617">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -93,7 +92,6 @@
 </head>
 <body class="pb-32">
 
-    <!-- HEADER -->
     <header class="pt-12 pb-6 px-6 flex flex-col items-center">
         <div class="relative group">
             <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg blur opacity-20 transition duration-1000"></div>
@@ -102,7 +100,6 @@
         <p class="mt-4 text-[10px] tracking-[0.5em] uppercase font-extrabold text-amber-500 opacity-80">Logística y Suministros Viales</p>
     </header>
 
-    <!-- NAVEGACIÓN -->
     <nav class="fixed bottom-0 left-0 right-0 z-50 glass-nav px-4 pb-8 pt-4">
         <div class="flex justify-around items-center max-w-lg mx-auto overflow-x-auto no-scrollbar gap-2">
             <button onclick="switchTab('emitir')" id="tab-emitir" class="min-w-[65px] flex flex-col items-center gap-1 transition-all tab-active shrink-0">
@@ -111,7 +108,7 @@
             </button>
             <button onclick="switchTab('recibir')" id="tab-recibir" class="min-w-[65px] flex flex-col items-center gap-1 transition-all text-slate-400 relative shrink-0">
                 <i class="fa-solid fa-clipboard-list text-xl"></i>
-                <span class="text-[9px] font-bold uppercase">Recibir</span>
+                <span class="text-[9px] font-bold uppercase">A Recibir</span>
                 <span id="badge-pendientes" class="absolute -top-1 right-1 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
             </button>
             <button onclick="switchTab('historial')" id="tab-historial" class="min-w-[65px] flex flex-col items-center gap-1 transition-all text-slate-400 shrink-0">
@@ -131,7 +128,6 @@
 
     <div class="container mx-auto p-4 max-w-lg">
         
-        <!-- VISTA: EMITIR -->
         <section id="view-emitir" class="space-y-6">
             <div class="main-container p-6 rounded-[2.5rem] space-y-5">
                 <div class="flex items-center gap-3 mb-2">
@@ -207,7 +203,6 @@
             </div>
         </section>
 
-        <!-- VISTA: PENDIENTES (RECIBIR) -->
         <section id="view-recibir" class="hidden space-y-4">
             <div class="flex items-center justify-between px-2 mb-2">
                 <h2 class="text-xl font-extrabold tracking-tight text-white !important">Pendientes de Recibir</h2>
@@ -216,7 +211,6 @@
             <div id="lista-pendientes" class="space-y-3"></div>
         </section>
 
-        <!-- VISTA: HISTORIAL / BÚSQUEDA -->
         <section id="view-historial" class="hidden space-y-4">
             <div class="main-container p-6 rounded-[2.5rem] sticky top-4 z-40 space-y-4 shadow-xl">
                 <div class="flex gap-2 p-1 bg-black/10 rounded-2xl">
@@ -274,7 +268,6 @@
             <div id="lista-historial" class="space-y-3 pt-2"></div>
         </section>
 
-        <!-- VISTA: DIRECTORIO -->
         <section id="view-directorio" class="hidden space-y-6">
             <div class="flex justify-between items-center px-2">
                 <h2 class="text-xl font-extrabold tracking-tight text-white !important">Contactos</h2>
@@ -328,7 +321,6 @@
             </div>
         </section>
 
-        <!-- VISTA: RESPALDO -->
         <section id="view-respaldo" class="hidden space-y-6">
             <div class="main-container p-6 rounded-[2.5rem]">
                 <h3 class="text-xs font-bold uppercase mb-2 tracking-widest flex items-center gap-2">
@@ -361,7 +353,6 @@
 
     </div>
 
-    <!-- MODAL INGRESAR PIN -->
     <div id="modal-pin" class="fixed inset-0 bg-slate-950/90 hidden z-[200] flex items-center justify-center p-4 backdrop-blur-md">
         <div class="main-container w-full max-w-xs p-6 rounded-[2.5rem] text-center">
             <i class="fa-solid fa-lock text-3xl text-secondary mb-3"></i>
@@ -375,7 +366,6 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR CONTACTO -->
     <div id="modal-editar-contacto" class="fixed inset-0 bg-slate-950/90 hidden z-[200] flex items-center justify-center p-4 backdrop-blur-md">
         <div class="main-container w-full max-w-sm p-6 rounded-[2.5rem]">
             <h3 class="text-lg font-extrabold uppercase mb-4" id="edit-modal-title">Editar Contacto</h3>
@@ -391,13 +381,11 @@
         </div>
     </div>
 
-    <!-- MODAL VISOR DE FOTO -->
     <div id="modal-visor" onclick="this.style.display='none'" class="fixed inset-0 bg-black/95 hidden z-[200] p-6 flex flex-col items-center justify-center">
         <img id="img-ampliada" class="max-w-full max-h-[80vh] rounded-2xl shadow-2xl">
         <p class="mt-4 text-[10px] font-bold uppercase text-slate-400">Toca para cerrar</p>
     </div>
 
-    <!-- MODAL CONFIRMACION EMISION OC -->
     <div id="modal-confirmacion-oc" class="fixed inset-0 bg-slate-950/90 hidden z-[150] flex items-center justify-center p-4 backdrop-blur-md">
         <div class="main-container w-full max-w-md p-6 rounded-[2.5rem]">
             <div class="flex flex-col items-center mb-4 text-center">
@@ -427,7 +415,6 @@
         </div>
     </div>
 
-    <!-- MODAL COMPARTIR EMAIL -->
     <div id="modal-compartir" class="fixed inset-0 bg-slate-950/90 hidden z-[100] flex items-center justify-center p-6 backdrop-blur-md">
         <div class="main-container w-full max-w-sm p-8 rounded-[3rem] text-center">
             <div class="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-4">
@@ -447,7 +434,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE RECEPCION / FOTO -->
     <div id="modal-recepcion" class="fixed inset-0 bg-slate-950/90 hidden z-[100] flex items-center justify-center p-6 backdrop-blur-md">
         <div class="main-container w-full max-w-sm p-8 rounded-[3rem]">
             <div class="flex flex-col items-center mb-6 text-center">
@@ -470,12 +456,10 @@
         </div>
     </div>
 
-    <!-- TOAST NOTIFICATIONS -->
     <div id="toast" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-bold z-[200] opacity-0 pointer-events-none flex items-center gap-2">
         <i class="fa-solid fa-circle-info text-amber-500"></i> <span id="toast-msg">Mensaje</span>
     </div>
 
-    <!-- SCRIPT PRINCIPAL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -766,7 +750,7 @@
             });
         }
 
-        // ====== GENERACIÓN DE LAS TARJETAS (CORRECCIÓN DE COLOR BOTÓN FOTO) ======
+        // ====== GENERACIÓN DE LAS TARJETAS ======
         const crearTarjetaOrden = (o, esHistorial = false) => {
             const claseCard = o.estado === 'RECIBIDA' ? 'card-received' : 'card-order';
             const estadoHtml = esHistorial ? `<span class="text-[8px] font-bold uppercase text-slate-500 block">${o.estado}</span>` : '';
@@ -778,7 +762,6 @@
                 let btnFotoAncho = '';
                 // Verificamos que tenga foto guardada
                 if (o.url_foto_remito && o.url_foto_remito !== "") {
-                    // SE CORRIGIÓ bg-secondary por bg-indigo-500 AQUÍ
                     btnFotoAncho = `<button onclick="verFotoId('${o.id}')" class="w-full mt-3 bg-indigo-500 text-white font-extrabold py-3 rounded-xl text-[11px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-indigo-600 transition-all"><i class="fa-solid fa-image"></i> Ver Foto del Remito</button>`;
                 }
                 
@@ -1151,6 +1134,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
