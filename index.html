@@ -427,7 +427,7 @@
         </div>
     </div>
 
-    <!-- MODAL COMPARTIR EMAIL (AHORA SOLO DE RESPALDO) -->
+    <!-- MODAL COMPARTIR EMAIL -->
     <div id="modal-compartir" class="fixed inset-0 bg-slate-950/90 hidden z-[100] flex items-center justify-center p-6 backdrop-blur-md">
         <div class="main-container w-full max-w-sm p-8 rounded-[3rem] text-center">
             <div class="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-4">
@@ -766,7 +766,7 @@
             });
         }
 
-        // ====== GENERACIÓN DE LAS TARJETAS (MODIFICADO PARA BOTON DE FOTO) ======
+        // ====== GENERACIÓN DE LAS TARJETAS (ARREGLO DE FOTO) ======
         const crearTarjetaOrden = (o, esHistorial = false) => {
             const claseCard = o.estado === 'RECIBIDA' ? 'card-received' : 'card-order';
             const estadoHtml = esHistorial ? `<span class="text-[8px] font-bold uppercase text-slate-500 block">${o.estado}</span>` : '';
@@ -775,20 +775,19 @@
             let botonesHtml = '';
             
             if (esHistorial) {
-                // Si estamos en historial, primero verificamos si hay foto para poner el nuevo botón ancho
                 let btnFotoAncho = '';
-                if (o.url_foto_remito) {
-                    btnFotoAncho = `<button onclick="verFoto('${o.url_foto_remito}')" class="w-full mt-3 bg-secondary text-white font-extrabold py-3 rounded-xl text-[11px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-indigo-600 transition-all"><i class="fa-solid fa-image"></i> Ver Foto del Remito</button>`;
+                // Verificamos que tenga foto guardada
+                if (o.url_foto_remito && o.url_foto_remito !== "") {
+                    // LLAMAMOS AL NUEVO METODO "verFotoId" PARA EVITAR ROMPER EL HTML CON TEXTO LARGO
+                    btnFotoAncho = `<button onclick="verFotoId('${o.id}')" class="w-full mt-3 bg-secondary text-white font-extrabold py-3 rounded-xl text-[11px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-indigo-600 transition-all"><i class="fa-solid fa-image"></i> Ver Foto del Remito</button>`;
                 }
                 
-                // Botón de Reenviar Mail (siempre abajo)
                 let btnReenviarMail = `<button onclick="openModalCompartirDesdeLista('${o.correlativo}')" class="w-full mt-2 bg-slate-100 text-slate-700 font-bold py-2 rounded-xl text-[10px] uppercase tracking-wider border border-slate-200 shadow-sm flex items-center justify-center gap-2 active:bg-slate-200 transition-all"><i class="fa-regular fa-envelope text-secondary"></i> Reenviar por Mail</button>`;
 
                 botonesHtml = `<div class="flex flex-col w-full">${btnFotoAncho}${btnReenviarMail}</div>`;
                 
             } else if (o.estado === 'PENDIENTE') {
-                // En la pestaña Recibir, SOLO muestra el botón RECIBIR a ancho completo
-                botonesHtml = `<button onclick="abrirModal('${o.id}', '${o.correlativo}', '${o.proveedor}')" class="w-full mt-3 bg-amber-500 text-black font-extrabold py-3 rounded-xl text-[11px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-amber-600 transition-all"><i class="fa-solid fa-camera"></i> <i class="fa-solid fa-check-double"></i> Recibir Orden</button>`;
+                botonesHtml = `<button onclick="abrirModal('${o.id}', '${o.correlativo}', '${escapeStr(o.proveedor)}')" class="w-full mt-3 bg-amber-500 text-black font-extrabold py-3 rounded-xl text-[11px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-amber-600 transition-all"><i class="fa-solid fa-camera"></i> <i class="fa-solid fa-check-double"></i> Recibir Orden</button>`;
             }
 
             return `
@@ -833,9 +832,13 @@
             container.innerHTML = pendientes.map(o => crearTarjetaOrden(o, false)).join('');
         }
 
-        window.verFoto = (data) => {
-            document.getElementById('img-ampliada').src = data;
-            document.getElementById('modal-visor').style.display = 'flex';
+        // === NUEVO MÉTODO SEGURO PARA VER FOTOS ===
+        window.verFotoId = (id) => {
+            const order = todasLasOrdenes.find(o => o.id === id);
+            if (order && order.url_foto_remito) {
+                document.getElementById('img-ampliada').src = order.url_foto_remito;
+                document.getElementById('modal-visor').style.display = 'flex';
+            }
         };
 
         window.procesarFoto = () => {
@@ -1149,6 +1152,7 @@
     </script>
 </body>
 </html>
+
 
 
 
