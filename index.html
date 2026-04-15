@@ -458,7 +458,7 @@
                 <p id="modal-desc" class="text-[10px] text-slate-600 mt-2 font-bold"></p>
             </div>
             <input type="text" id="input-receptor" placeholder="¿Quién recibe?" class="input-premium mb-4 text-center">
-            <label for="input-foto" id="label-foto" class="block mb-6 p-6 rounded-2xl text-center border-dashed border-2 border-black/10 cursor-pointer bg-white">
+            <label for="input-foto" id="label-foto" class="block mb-6 p-6 rounded-2xl text-center border-dashed border-2 border-black/10 cursor-pointer bg-white transition-all">
                 <i class="fa-solid fa-camera text-2xl mb-2 block text-slate-400"></i>
                 <span class="text-[10px] font-extrabold uppercase text-slate-500" id="foto-status">Capturar Foto Remito</span>
                 <input type="file" id="input-foto" accept="image/*" capture="camera" class="hidden" onchange="procesarFoto()">
@@ -766,21 +766,28 @@
             });
         }
 
-        // ====== GENERACIÓN DE LAS TARJETAS ======
+        // ====== GENERACIÓN DE LAS TARJETAS (MODIFICADO PARA BOTON DE FOTO) ======
         const crearTarjetaOrden = (o, esHistorial = false) => {
             const claseCard = o.estado === 'RECIBIDA' ? 'card-received' : 'card-order';
             const estadoHtml = esHistorial ? `<span class="text-[8px] font-bold uppercase text-slate-500 block">${o.estado}</span>` : '';
-            const fotoHtml = (esHistorial && o.url_foto_remito) ? `<button onclick="verFoto('${o.url_foto_remito}')" class="bg-secondary text-white px-3 py-1.5 rounded-full text-[8px] font-black uppercase shadow-sm">Ver Remito</button>` : '';
             const htmlImporte = o.importe ? `<div class="mt-2 text-xs font-black text-black">${o.moneda} ${parseFloat(o.importe).toLocaleString('es-UY')} <span class="text-[8px] font-bold text-slate-500 uppercase">(${o.iva})</span></div>` : '';
 
-            // Lógica para botones según pestaña
             let botonesHtml = '';
             
             if (esHistorial) {
-                // En el historial siempre se muestra el botón de compartir
-                botonesHtml = `<button onclick="openModalCompartirDesdeLista('${o.correlativo}')" class="w-full mt-3 bg-slate-100 text-slate-700 font-bold py-2 rounded-xl text-[10px] uppercase tracking-wider border border-slate-200 shadow-sm flex items-center justify-center gap-2 active:bg-slate-200 transition-all"><i class="fa-regular fa-envelope text-secondary"></i> Reenviar por Mail</button>`;
+                // Si estamos en historial, primero verificamos si hay foto para poner el nuevo botón ancho
+                let btnFotoAncho = '';
+                if (o.url_foto_remito) {
+                    btnFotoAncho = `<button onclick="verFoto('${o.url_foto_remito}')" class="w-full mt-3 bg-secondary text-white font-extrabold py-3 rounded-xl text-[11px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-indigo-600 transition-all"><i class="fa-solid fa-image"></i> Ver Foto del Remito</button>`;
+                }
+                
+                // Botón de Reenviar Mail (siempre abajo)
+                let btnReenviarMail = `<button onclick="openModalCompartirDesdeLista('${o.correlativo}')" class="w-full mt-2 bg-slate-100 text-slate-700 font-bold py-2 rounded-xl text-[10px] uppercase tracking-wider border border-slate-200 shadow-sm flex items-center justify-center gap-2 active:bg-slate-200 transition-all"><i class="fa-regular fa-envelope text-secondary"></i> Reenviar por Mail</button>`;
+
+                botonesHtml = `<div class="flex flex-col w-full">${btnFotoAncho}${btnReenviarMail}</div>`;
+                
             } else if (o.estado === 'PENDIENTE') {
-                // En la pestaña Recibir, SOLO muestra el botón RECIBIR a ancho completo (w-full)
+                // En la pestaña Recibir, SOLO muestra el botón RECIBIR a ancho completo
                 botonesHtml = `<button onclick="abrirModal('${o.id}', '${o.correlativo}', '${o.proveedor}')" class="w-full mt-3 bg-amber-500 text-black font-extrabold py-3 rounded-xl text-[11px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-amber-600 transition-all"><i class="fa-solid fa-camera"></i> <i class="fa-solid fa-check-double"></i> Recibir Orden</button>`;
             }
 
@@ -804,14 +811,11 @@
                         
                         ${htmlImporte}
 
-                        <div class="flex items-center justify-between mt-3 mb-1">
-                            <div class="text-[8px] font-bold text-slate-400 uppercase"><i class="fa-solid fa-user mr-1"></i>${o.emisor}</div>
-                            ${fotoHtml}
+                        <div class="mt-3 mb-1">
+                            <div class="text-[8px] font-bold text-slate-400 uppercase"><i class="fa-solid fa-user mr-1"></i>Emisor: ${o.emisor}</div>
                         </div>
                     </div>
-                    <div class="flex gap-2 w-full">
-                        ${botonesHtml}
-                    </div>
+                    ${botonesHtml}
                 </div>
             `;
         };
@@ -848,7 +852,8 @@
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     base64Foto = canvas.toDataURL('image/jpeg', 0.6);
                     document.getElementById('foto-status').innerHTML = "Foto lista ✓";
-                    document.getElementById('label-foto').style.borderColor = 'var(--success)';
+                    document.getElementById('label-foto').classList.add('border-success', 'bg-success/5');
+                    document.getElementById('label-foto').classList.remove('border-black/10');
                 };
                 img.src = e.target.result;
             };
@@ -1075,14 +1080,14 @@
             document.getElementById('modal-desc').innerText = `${num} | ${prov}`;
             document.getElementById('modal-recepcion').classList.remove('hidden');
             document.getElementById('foto-status').innerText = "Capturar Foto Remito";
-            document.getElementById('label-foto').style.borderColor = 'rgba(0,0,0,0.1)';
+            document.getElementById('label-foto').classList.remove('border-success', 'bg-success/5');
+            document.getElementById('label-foto').classList.add('border-black/10');
             document.getElementById('input-receptor').value = "";
             base64Foto = "";
         };
 
         window.cerrarModal = () => document.getElementById('modal-recepcion').classList.add('hidden');
 
-        // ====== ENVÍO AUTOMÁTICO DE CORREO DE RECEPCIÓN ======
         window.confirmarRecepcion = async () => {
             const rec = document.getElementById('input-receptor').value.trim();
             const btn = document.getElementById('btn-certificar');
@@ -1095,17 +1100,14 @@
                     estado: 'RECIBIDA', receptor: rec, fecha_recepcion: ahora, url_foto_remito: base64Foto 
                 });
                 
-                // Mensaje detallado para Tania
                 const msg = `CVC - RECEPCIÓN DE ORDEN\n\nLa orden ${currentNum} ha sido recibida conforme por: ${rec}.\n\n* La foto del remito ya se encuentra guardada en el sistema y está disponible para visualizarse desde la aplicación en la pestaña 'Buscar' (Historial).`;
                 cerrarModal();
                 showToast("Orden Recibida con Éxito");
                 
-                // Abre correo automáticamente a Tania
                 window.location.href = `mailto:${EMAIL_CVC_ADMIN}?subject=${encodeURIComponent('OC Recibida y Guardada: ' + currentNum)}&body=${encodeURIComponent(msg)}`;
             } catch (e) { showToast("Error al confirmar."); }
             btn.disabled = false; btn.innerHTML = 'Confirmar';
         };
-        // ========================================================
 
         window.exportarCSV = () => {
             if(!todasLasOrdenes.length) return showToast("No hay datos");
