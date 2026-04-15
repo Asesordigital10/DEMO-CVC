@@ -218,22 +218,18 @@
 
         <!-- VISTA: HISTORIAL / BÚSQUEDA -->
         <section id="view-historial" class="hidden space-y-4">
-            <!-- HEADER DE BÚSQUEDA (COMPACTO Y FIJO) -->
             <div class="main-container p-6 rounded-[2.5rem] sticky top-4 z-40 space-y-4 shadow-xl">
-                <!-- Filtro de Estados -->
                 <div class="flex gap-2 p-1 bg-black/10 rounded-2xl">
                     <button onclick="setFiltroEstado('TODAS')" id="btn-filtro-todas" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-xl bg-white text-black transition-all shadow-sm">Todas</button>
                     <button onclick="setFiltroEstado('PENDIENTE')" id="btn-filtro-pend" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-xl text-slate-600 transition-all">Pendientes</button>
                     <button onclick="setFiltroEstado('RECIBIDA')" id="btn-filtro-reci" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-xl text-slate-600 transition-all">Recibidas</button>
                 </div>
 
-                <!-- Barra de Búsqueda Rápida -->
                 <div class="relative">
                     <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" id="input-busqueda" oninput="filtrarHistorial()" placeholder="Búsqueda rápida..." class="input-premium pl-12 py-3">
                 </div>
 
-                <!-- Controles de Filtros Avanzados (Desplegable) -->
                 <div class="flex justify-between items-center px-1">
                     <button onclick="toggleFiltrosAvanzados()" class="text-[10px] font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-2 hover:text-primary transition-colors">
                         <i class="fa-solid fa-sliders"></i> <span id="texto-toggle-filtros">Filtros Avanzados</span>
@@ -241,7 +237,6 @@
                     <button onclick="limpiarFiltros()" class="text-[9px] font-black text-slate-500 uppercase tracking-widest hover:text-black transition-colors">Limpiar</button>
                 </div>
 
-                <!-- Panel de Filtros Extra (Oculto por defecto) -->
                 <div id="panel-filtros-avanzados" class="hidden transition-all">
                     <div class="filter-grid border-t border-black/10 pt-4 mt-2">
                         <div class="space-y-1">
@@ -276,7 +271,6 @@
                 </div>
             </div>
 
-            <!-- RESULTADOS -->
             <div id="lista-historial" class="space-y-3 pt-2"></div>
         </section>
 
@@ -289,7 +283,6 @@
                 </button>
             </div>
 
-            <!-- PROVEEDORES -->
             <div class="main-container p-6 rounded-[2.5rem]">
                 <h3 class="text-xs font-bold uppercase mb-4 tracking-widest flex items-center gap-2">
                     <i class="fa-solid fa-truck-fast text-secondary"></i> Proveedores
@@ -314,7 +307,6 @@
                 </div>
             </div>
             
-            <!-- EMISORES -->
             <div class="main-container p-6 rounded-[2.5rem]">
                 <h3 class="text-xs font-bold uppercase mb-4 tracking-widest flex items-center gap-2">
                     <i class="fa-solid fa-user-tie text-primary"></i> Emisores
@@ -447,7 +439,7 @@
             
             <div class="space-y-3 mb-6">
                 <button onclick="shareViaEmail()" class="w-full py-4 bg-slate-800 text-white rounded-2xl font-bold text-[11px] shadow flex flex-col items-center justify-center gap-1 uppercase hover:bg-slate-700 transition-colors">
-                    <div class="flex items-center gap-2"><i class="fa-regular fa-paper-plane text-lg"></i> Enviar Orden por Email</div>
+                    <div class="flex items-center gap-2"><i class="fa-regular fa-paper-plane text-lg"></i> Reenviar Orden por Email</div>
                     <span id="share-email-dir" class="text-[9px] font-normal opacity-90 text-amber-500 mt-1 px-4 leading-tight">...</span>
                 </button>
             </div>
@@ -569,7 +561,6 @@
         };
         ticTac();
 
-        // === FUNCIONES DE FILTROS AVANZADOS DESPLEGABLES ===
         window.toggleFiltrosAvanzados = () => {
             const panel = document.getElementById('panel-filtros-avanzados');
             const texto = document.getElementById('texto-toggle-filtros');
@@ -643,7 +634,6 @@
             }
             container.innerHTML = filtradas.map(o => crearTarjetaOrden(o, true)).join('');
         };
-        // ========================================================
 
         window.toggleModoAdmin = () => {
             if (isDirectorioAdmin) {
@@ -982,9 +972,11 @@
             return `CVC - ORDEN DE COMPRA: ${oc.correlativo}\n\nFecha: ${oc.fecha}\nProveedor: ${oc.proveedor}\nSolicita: ${oc.emisor}\nDestino: ${oc.maquinaria} | ${oc.obra}\n\nDetalle del pedido:\n${oc.detalle}${imp.replace(/\*/g, '')}`;
         };
 
-        window.shareViaEmail = () => {
-            if(!currentOcToShare) return;
-            const oc = currentOcToShare;
+        // AHORA RECIBE UN PARÁMETRO OPCIONAL (ocData) PARA ENVIOS AUTOMÁTICOS
+        window.shareViaEmail = (ocData = null) => {
+            const oc = ocData || currentOcToShare;
+            if(!oc) return;
+            
             const emailProv = getProvInfo(oc.proveedor).email || '';
             const body = construirMensaje(oc); 
             
@@ -1055,8 +1047,19 @@
                 document.getElementById('fecha-oc').value = new Date().toLocaleString('es-UY', options).replace(',', '');
                 
                 showToast("Orden Emitida y Guardada");
+                
+                const copiaParaCompartir = Object.assign({}, ordenTemporalParaEmitir);
                 cerrarModalConfirmacion();
-                openModalCompartir(ordenTemporalParaEmitir); 
+                
+                openModalCompartir(copiaParaCompartir); 
+                
+                // === ENVÍO AUTOMÁTICO DE CORREO ===
+                // Retrasamos medio segundo para que la ventana se cierre suavemente primero
+                setTimeout(() => {
+                    shareViaEmail(copiaParaCompartir);
+                }, 500);
+                // ===================================
+
             } catch (err) { 
                 console.error("Error emitiendo OC:", err);
                 showToast("Error al emitir la orden."); 
