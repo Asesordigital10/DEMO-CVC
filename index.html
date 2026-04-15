@@ -766,7 +766,7 @@
             });
         }
 
-        // ====== GENERACIÓN DE LAS TARJETAS (ARREGLO DE FOTO) ======
+        // ====== GENERACIÓN DE LAS TARJETAS (CORRECCIÓN DE COLOR BOTÓN FOTO) ======
         const crearTarjetaOrden = (o, esHistorial = false) => {
             const claseCard = o.estado === 'RECIBIDA' ? 'card-received' : 'card-order';
             const estadoHtml = esHistorial ? `<span class="text-[8px] font-bold uppercase text-slate-500 block">${o.estado}</span>` : '';
@@ -778,8 +778,8 @@
                 let btnFotoAncho = '';
                 // Verificamos que tenga foto guardada
                 if (o.url_foto_remito && o.url_foto_remito !== "") {
-                    // LLAMAMOS AL NUEVO METODO "verFotoId" PARA EVITAR ROMPER EL HTML CON TEXTO LARGO
-                    btnFotoAncho = `<button onclick="verFotoId('${o.id}')" class="w-full mt-3 bg-secondary text-white font-extrabold py-3 rounded-xl text-[11px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-indigo-600 transition-all"><i class="fa-solid fa-image"></i> Ver Foto del Remito</button>`;
+                    // SE CORRIGIÓ bg-secondary por bg-indigo-500 AQUÍ
+                    btnFotoAncho = `<button onclick="verFotoId('${o.id}')" class="w-full mt-3 bg-indigo-500 text-white font-extrabold py-3 rounded-xl text-[11px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:bg-indigo-600 transition-all"><i class="fa-solid fa-image"></i> Ver Foto del Remito</button>`;
                 }
                 
                 let btnReenviarMail = `<button onclick="openModalCompartirDesdeLista('${o.correlativo}')" class="w-full mt-2 bg-slate-100 text-slate-700 font-bold py-2 rounded-xl text-[10px] uppercase tracking-wider border border-slate-200 shadow-sm flex items-center justify-center gap-2 active:bg-slate-200 transition-all"><i class="fa-regular fa-envelope text-secondary"></i> Reenviar por Mail</button>`;
@@ -832,7 +832,6 @@
             container.innerHTML = pendientes.map(o => crearTarjetaOrden(o, false)).join('');
         }
 
-        // === NUEVO MÉTODO SEGURO PARA VER FOTOS ===
         window.verFotoId = (id) => {
             const order = todasLasOrdenes.find(o => o.id === id);
             if (order && order.url_foto_remito) {
@@ -1152,6 +1151,7 @@
     </script>
 </body>
 </html>
+
 
 
 
